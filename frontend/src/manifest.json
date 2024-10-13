@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Bit Trade Workshop",
+  "version": "1.0",
+  "permissions": ["tabs", "activeTab"],
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "action": {
+    "default_popup": "index.html?mode=extensionPopup",
+    "default_icon": "app.png"
+  },
+  "icons": {
+    "64": "app.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.bybit.com/*"],
+      "js": ["bybitApi.js"]
+    }
+  ]
+}
