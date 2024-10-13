@@ -1,0 +1,15 @@
+{
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "javascript.preferences.importModuleSpecifier": "relative",
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/__pycache__": true,
+    },
+    "editor.tabCompletion": "on",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+    "files.eol": "\n",
+    "svg.preview.background": "transparent",
+}
