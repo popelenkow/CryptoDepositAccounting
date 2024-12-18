@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+tmp/
+.eslintrc.local.json
+yarn-error.log
+tsconfig.tsbuildinfo
+.venv/
+__pycache__/
+*.db
+*.tsbuildinfo
+.vite/

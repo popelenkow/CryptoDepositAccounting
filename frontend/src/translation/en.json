@@ -1,0 +1,32 @@
+{
+  "components": {
+    "transactionForm": {
+      "amount": "Amount",
+      "apr": "APR",
+      "duration": "Duration",
+      "method": "Method",
+      "price": "Price",
+      "save": "Save",
+      "type": "Type"
+    }
+  },
+  "page": {
+    "account": {
+      "btc": "Btc:",
+      "label": "Account"
+    },
+    "editTransaction": {
+      "back": "Back",
+      "label": "Edit Transaction"
+    },
+    "newTransaction": {
+      "back": "Back",
+      "close": "Close",
+      "label": "New Transaction"
+    },
+    "notFound": {
+      "goHome": "Back to home",
+      "label": "Page not found"
+    }
+  }
+}
