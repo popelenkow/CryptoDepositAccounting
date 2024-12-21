@@ -48,6 +48,15 @@ export const getTransactionsOptions = queryOptions({
     }),
 });
 
+export const getGridTransactionsOptions = queryOptions({
+  ...getTransactionsOptions,
+  select: (transactions) =>
+    transactions.filter(
+      (transaction): transaction is Transaction<'grid'> =>
+        transaction.data.type === 'grid',
+    ),
+});
+
 export const addTransactionOptions = mutationOptions({
   mutationKey: ['addTransaction'],
   mutationFn: (jsonBody: TransactionData) =>

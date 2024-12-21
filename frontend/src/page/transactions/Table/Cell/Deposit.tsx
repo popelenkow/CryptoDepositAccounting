@@ -5,7 +5,6 @@ import { getInstrumentInfosOptions } from '../../../../api/endpoints';
 import { GridTransactionData } from '../../../../api/types';
 import { assertDefined } from '../../../../common/assert';
 import { currencySymbols } from '../../../../common/currency';
-import { getGridRangePrices } from '../../../../common/grid/ratio';
 import { getGridTradeCoin } from '../../../../common/grid/trade';
 
 export type GridsCellDepositProps = {
@@ -25,17 +24,6 @@ export const GridsCellDeposit: FC<GridsCellDepositProps> = (props) => {
   );
 
   const coins = getGridTradeCoin(transaction, instrumentInfo).toFixed(2);
-
-  const prices = getGridRangePrices(transaction, instrumentInfo, 'low');
-  const orders = transaction.orders
-    ?.map((x) => x.price)
-    .filter((x) => {
-      if (prices.includes(x)) {
-        return false;
-      }
-      return true;
-    });
-  console.log({ instrumentInfo, transaction, orders, prices });
 
   return (
     <TableCell align='right'>

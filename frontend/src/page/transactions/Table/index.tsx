@@ -12,20 +12,13 @@ import { FC } from 'react';
 import { getTransactionsOptions } from '../../../api/endpoints';
 import { customScrollbarSx } from '../../../components/CustomScrollbar';
 import { LinearLoader } from '../../../components/LinearLoader';
-import { useGridList } from '../useGridList';
-import { GridsCellDeposit } from './Cell/Deposit';
-import { GridsCellGridProfit } from './Cell/GridProfit';
-import { GridsCellPrice } from './Cell/Price';
-import { GridsCellTime } from './Cell/Time';
-import { GridsCellTotalProfit } from './Cell/TotalProfit';
-import { GridsHeadDeposit } from './Header/Deposit';
-import { GridsHeadGridProfit } from './Header/GridProfit';
-import { GridsHeadTime } from './Header/Time';
-import { GridsHeadTotalProfit } from './Header/TotalProfit';
+import { useSortedGridList } from '../useGridList';
+import { TransactionsPageTableAllRow } from './AllRow';
+import { TransactionsPageTableRow } from './Row';
 
 export const TransactionsPageTable: FC = () => {
   const transactions = useQuery(getTransactionsOptions);
-  const list = useGridList();
+  const list = useSortedGridList();
 
   return (
     <TableContainer sx={customScrollbarSx}>
@@ -59,29 +52,14 @@ export const TransactionsPageTable: FC = () => {
             <TableCell align='right'>Grid Profit</TableCell>
             <TableCell align='right'>Total Profit</TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell align='right' width='1%'>
-              All
-            </TableCell>
-            <TableCell align='right'></TableCell>
-            <GridsHeadDeposit />
-            <TableCell align='right'></TableCell>
-            <GridsHeadTime />
-            <GridsHeadGridProfit />
-            <GridsHeadTotalProfit />
-          </TableRow>
+          {!!list.length && <TransactionsPageTableAllRow />}
         </TableHead>
         <TableBody>
-          {list.map(({ id, data }) => (
-            <TableRow key={id}>
-              <TableCell align='right'>{id}</TableCell>
-              <TableCell align='right'>{data.instrument}</TableCell>
-              <GridsCellDeposit transaction={data} />
-              <GridsCellPrice transaction={data} />
-              <GridsCellTime transaction={data} />
-              <GridsCellGridProfit transaction={data} />
-              <GridsCellTotalProfit transaction={data} />
-            </TableRow>
+          {list.map((transaction) => (
+            <TransactionsPageTableRow
+              key={transaction.id}
+              transaction={transaction}
+            />
           ))}
           {!list.length && (
             <TableRow>

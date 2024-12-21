@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getTransactionsOptions } from '../../api/endpoints';
+import { getGridTransactionsOptions } from '../../api/endpoints';
 import { Transaction } from '../../api/types';
 import {
   getGridCurrentPricePercent,
@@ -62,28 +62,30 @@ const getSort = (type: GridOptionsSortType, order: GridOptionsSortOrder) => {
 };
 
 export const useGridList = () => {
-  const transactions = useQuery(getTransactionsOptions);
-  const options = useGridOptionsStore();
+  const transactions = useQuery(getGridTransactionsOptions);
+  const status = useGridOptionsStore((options) => options.status);
 
   if (!transactions.data) {
     return [];
   }
 
-  const gridList = transactions.data.filter(
-    (transaction): transaction is Transaction<'grid'> =>
-      transaction.data.type === 'grid',
-  );
-
-  const filteredList = gridList.filter((transaction) => {
-    if (options.status === 'actual') {
+  const filteredList = transactions.data.filter((transaction) => {
+    if (status === 'actual') {
       return transaction.data.close === 'pending';
     }
     return transaction.data.close !== 'pending';
   });
 
-  const sortedList = filteredList.sort(
-    getSort(options.sortType, options.sortOrder),
-  );
+  return filteredList;
+};
+
+export const useSortedGridList = () => {
+  const transactions = useGridList();
+  const sortType = useGridOptionsStore((options) => options.sortType);
+  const sortOrder = useGridOptionsStore((options) => options.sortOrder);
+
+  const sort = getSort(sortType, sortOrder);
+  const sortedList = transactions.sort(sort);
 
   return sortedList;
 };
