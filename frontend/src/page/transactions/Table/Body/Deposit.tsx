@@ -7,10 +7,10 @@ import { assertDefined } from '../../../../common/assert';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridTradeCoin } from '../../../../common/grid/trade';
 
-export type GridsCellDepositProps = {
+export type GridsBodyDepositProps = {
   transaction: GridTransactionData;
 };
-export const GridsCellDeposit: FC<GridsCellDepositProps> = (props) => {
+export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
   const { transaction } = props;
 
   const instrumentInfos = useQuery(getInstrumentInfosOptions);

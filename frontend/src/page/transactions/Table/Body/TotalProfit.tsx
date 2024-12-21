@@ -3,18 +3,16 @@ import { FC } from 'react';
 import { GridTransactionData } from '../../../../api/types';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
-import {
-  getGridFunding,
-  getGridSpot,
-  getGridTotal,
-} from '../../../../common/grid/total';
+import { getGridFunding } from '../../../../common/grid/funding';
+import { getGridSpot } from '../../../../common/grid/spot';
+import { getGridTotal } from '../../../../common/grid/total';
 import { getGridTrades } from '../../../../common/grid/trade';
 import { useGridOptionsStore } from '../../Options/store';
 
-export type GridsTableTotalProfitProps = {
+export type GridsBodyTotalProfitProps = {
   transaction: GridTransactionData;
 };
-export const GridsCellTotalProfit: FC<GridsTableTotalProfitProps> = (props) => {
+export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
   const { transaction } = props;
 
   const mode = useGridOptionsStore((state) => state.mode);

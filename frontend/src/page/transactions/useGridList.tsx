@@ -6,7 +6,7 @@ import {
   getGridEndPricePercent,
 } from '../../common/grid/ratio';
 import { getGridTotal } from '../../common/grid/total';
-import { getGridPeriodIncome, getGridTrades } from '../../common/grid/trade';
+import { getGridPeriodTrades, getGridTrades } from '../../common/grid/trade';
 import {
   GridOptionsSortOrder,
   GridOptionsSortType,
@@ -26,10 +26,10 @@ const sortValueDict: SortValueDict = {
       ? getGridCurrentPricePercent(transaction.data)
       : getGridEndPricePercent(transaction.data),
   duration: (transaction) => transaction.data.duration,
-  gridAprPercent: (transaction) =>
-    getGridPeriodIncome(transaction.data, 'percent', 'daily'),
-  gridAprUsdt: (transaction) =>
-    getGridPeriodIncome(transaction.data, 'usdt', 'daily'),
+  gridPeriodPercent: (transaction) =>
+    getGridPeriodTrades(transaction.data, 'percent', 'daily', 'optimistic'),
+  gridPeriodUsdt: (transaction) =>
+    getGridPeriodTrades(transaction.data, 'usdt', 'daily', 'optimistic'),
   gridTotalPercent: (transaction) => getGridTrades(transaction.data, 'percent'),
   gridTotalUsdt: (transaction) => getGridTrades(transaction.data, 'usdt'),
   totalPercent: (transaction) => getGridTotal(transaction.data, 'percent'),

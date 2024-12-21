@@ -1,11 +1,17 @@
 import { GridTransactionData, InstrumentInfo } from '../../api/types';
-import { commissions } from '../../utils/transaction';
 import { assertNever } from '../assert';
-import { mapSecondsToDays } from '../time';
+import { IncomePeriod, toPeriodValue } from '../period';
+import { commissions } from '../transaction';
 import { getGridRangePrices, getGridTradeRatio } from './ratio';
+import { getGridDuration, getGridsDuration } from './time';
 
 export type IncomeMode = 'usdt' | 'percent';
-export type IncomePeriod = 'daily' | 'weekly' | 'monthly' | 'yearly';
+export type IncomePrediction = 'pessimistic' | 'optimistic';
+
+export const isGridOutOfTrade = (transaction: GridTransactionData) => {
+  const { close, currentPrice, minPrice } = transaction;
+  return close === 'pending' && currentPrice < minPrice;
+};
 
 export const getGridTradeCoin = (
   transaction: GridTransactionData,
@@ -46,33 +52,42 @@ export const getGridTrades = (
   return profit * trades;
 };
 
-export const getGridPeriodIncome = (
+export const getGridsTrades = (
+  transactions: GridTransactionData[],
+  mode: IncomeMode,
+) => transactions.reduce((acc, x) => acc + getGridTrades(x, mode), 0);
+
+export const getGridPeriodTrades = (
   transaction: GridTransactionData,
   mode: IncomeMode,
   period: IncomePeriod,
+  prediction: IncomePrediction,
 ) => {
-  const { duration } = transaction;
+  if (prediction === 'pessimistic' && isGridOutOfTrade(transaction)) {
+    return 0;
+  }
   const profit = getGridTrades(transaction, mode);
-  const days = mapSecondsToDays(duration);
+  const days = getGridDuration(transaction);
   const daily = profit / days;
-  if (period === 'daily') {
-    return daily;
-  }
-  if (period === 'weekly') {
-    return daily * 7;
-  }
-  if (period === 'monthly') {
-    return daily * 30;
-  }
-  if (period === 'yearly') {
-    return daily * 365;
-  }
-  return assertNever(period);
+  return toPeriodValue(daily, period);
 };
 
-export const periodNames: Record<IncomePeriod, string> = {
-  daily: 'Daily',
-  weekly: 'Weekly',
-  monthly: 'Monthly',
-  yearly: 'Yearly',
+export const getGridsPeriodTrades = (
+  rawTransactions: GridTransactionData[],
+  mode: IncomeMode,
+  period: IncomePeriod,
+  prediction: IncomePrediction,
+) => {
+  const transactions =
+    prediction === 'optimistic'
+      ? rawTransactions
+      : rawTransactions.filter((x) => !isGridOutOfTrade(x));
+
+  const profit = transactions.reduce(
+    (acc, x) => acc + getGridTrades(x, mode),
+    0,
+  );
+  const days = getGridsDuration(transactions);
+  const daily = profit / days;
+  return toPeriodValue(daily, period);
 };

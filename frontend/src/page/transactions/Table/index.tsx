@@ -13,8 +13,9 @@ import { getTransactionsOptions } from '../../../api/endpoints';
 import { customScrollbarSx } from '../../../components/CustomScrollbar';
 import { LinearLoader } from '../../../components/LinearLoader';
 import { useSortedGridList } from '../useGridList';
-import { TransactionsPageTableAllRow } from './AllRow';
-import { TransactionsPageTableRow } from './Row';
+import { GridsBodyRow } from './Body/Row';
+import { GridsHeadRow } from './Head/Row';
+import { GridsHeadAllRow } from './HeadAll/Row';
 
 export const TransactionsPageTable: FC = () => {
   const transactions = useQuery(getTransactionsOptions);
@@ -41,25 +42,12 @@ export const TransactionsPageTable: FC = () => {
             },
           }}
         >
-          <TableRow>
-            <TableCell align='right' width='1%'>
-              Id
-            </TableCell>
-            <TableCell align='right'>Instrument</TableCell>
-            <TableCell align='right'>Deposit</TableCell>
-            <TableCell align='right'>Price</TableCell>
-            <TableCell align='right'>Time</TableCell>
-            <TableCell align='right'>Grid Profit</TableCell>
-            <TableCell align='right'>Total Profit</TableCell>
-          </TableRow>
-          {!!list.length && <TransactionsPageTableAllRow />}
+          <GridsHeadRow />
+          {!!list.length && <GridsHeadAllRow />}
         </TableHead>
         <TableBody>
           {list.map((transaction) => (
-            <TransactionsPageTableRow
-              key={transaction.id}
-              transaction={transaction}
-            />
+            <GridsBodyRow key={transaction.id} transaction={transaction} />
           ))}
           {!list.length && (
             <TableRow>

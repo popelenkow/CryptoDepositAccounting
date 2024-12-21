@@ -2,17 +2,14 @@ import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
-import {
-  getGridFunding,
-  getGridSpot,
-  getGridTotal,
-} from '../../../../common/grid/total';
-import { getGridTrades } from '../../../../common/grid/trade';
+import { getGridsFunding } from '../../../../common/grid/funding';
+import { getGridsSpot } from '../../../../common/grid/spot';
+import { getGridsTotal } from '../../../../common/grid/total';
+import { getGridsTrades } from '../../../../common/grid/trade';
 import { useGridOptionsStore } from '../../Options/store';
 import { useGridList } from '../../useGridList';
-import { sum } from './common';
 
-export const GridsHeadTotalProfit: FC = () => {
+export const GridsHeadAllTotalProfit: FC = () => {
   const list = useGridList();
   const mode = useGridOptionsStore((state) => state.mode);
 
@@ -22,10 +19,12 @@ export const GridsHeadTotalProfit: FC = () => {
   const divisorToPercent = deposit / 100;
   const divisor = mode === 'usdt' ? 1 : divisorToPercent;
 
-  const total = sum(list, 'usdt', getGridTotal);
-  const spot = sum(list, 'usdt', getGridSpot);
-  const funding = sum(list, 'usdt', getGridFunding);
-  const grid = sum(list, 'usdt', getGridTrades);
+  const transactions = list.map((x) => x.data);
+
+  const total = getGridsTotal(transactions, 'usdt');
+  const spot = getGridsSpot(transactions, 'usdt');
+  const funding = getGridsFunding(transactions, 'usdt');
+  const grid = getGridsTrades(transactions, 'usdt');
 
   return (
     <TableCell align='right'>

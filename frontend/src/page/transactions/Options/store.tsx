@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { IncomeMode, IncomePeriod } from '../../../common/grid/trade';
+import { IncomeMode, IncomePrediction } from '../../../common/grid/trade';
+import { IncomePeriod } from '../../../common/period';
 
 export type GridOptionsStatus = 'actual' | 'history';
 export type GridOptionsSortType =
@@ -9,8 +10,8 @@ export type GridOptionsSortType =
   | 'duration'
   | 'totalPercent'
   | 'totalUsdt'
-  | 'gridAprPercent'
-  | 'gridAprUsdt'
+  | 'gridPeriodPercent'
+  | 'gridPeriodUsdt'
   | 'gridTotalPercent'
   | 'gridTotalUsdt';
 export type GridOptionsSortOrder = 'asc' | 'desc';
@@ -18,6 +19,7 @@ export type GridOptionsSortOrder = 'asc' | 'desc';
 export type GridOptionsState = {
   status: GridOptionsStatus;
   mode: IncomeMode;
+  prediction: IncomePrediction;
   period: IncomePeriod;
   sortType: GridOptionsSortType;
   sortOrder: GridOptionsSortOrder;
@@ -25,8 +27,9 @@ export type GridOptionsState = {
 const defaultState: GridOptionsState = {
   status: 'actual',
   mode: 'percent',
+  prediction: 'pessimistic',
   period: 'daily',
-  sortType: 'gridAprPercent',
+  sortType: 'gridPeriodPercent',
   sortOrder: 'desc',
 };
 

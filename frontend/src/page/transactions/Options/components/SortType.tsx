@@ -9,8 +9,8 @@ const sortTypes: Record<GridOptionsSortType, string> = {
   duration: 'Duration',
   totalPercent: 'TotalPercent',
   totalUsdt: 'TotalUsdt',
-  gridAprPercent: 'GridAprPercent',
-  gridAprUsdt: 'GridAprUsdt',
+  gridPeriodPercent: 'GridPeriodPercent',
+  gridPeriodUsdt: 'GridPeriodUsdt',
   gridTotalPercent: 'GridTotalPercent',
   gridTotalUsdt: 'GridTotalUsdt',
 };

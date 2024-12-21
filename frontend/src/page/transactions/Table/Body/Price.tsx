@@ -9,10 +9,10 @@ import {
 } from '../../../../common/ratio';
 import { useGridOptionsStore } from '../../Options/store';
 
-export type GridsCellPriceProps = {
+export type GridsBodyPriceProps = {
   transaction: GridTransactionData;
 };
-export const GridsCellPrice: FC<GridsCellPriceProps> = (props) => {
+export const GridsBodyPrice: FC<GridsBodyPriceProps> = (props) => {
   const { transaction } = props;
   const { minPrice, maxPrice, currentPrice, startPrice, endPrice } =
     transaction;

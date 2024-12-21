@@ -1,6 +1,6 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { FC } from 'react';
-import { IncomePeriod, periodNames } from '../../../../common/grid/trade';
+import { IncomePeriod, periodNames } from '../../../../common/period';
 import { useGridOptionsStore } from '../store';
 
 export const TransactionsPageOptionsPeriod: FC = () => {

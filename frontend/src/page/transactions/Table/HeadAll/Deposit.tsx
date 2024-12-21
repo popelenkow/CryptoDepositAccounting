@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { currencySymbols } from '../../../../common/currency';
 import { useGridList } from '../../useGridList';
 
-export const GridsHeadDeposit: FC = () => {
+export const GridsHeadAllDeposit: FC = () => {
   const list = useGridList();
 
   const deposit = list.reduce((acc, x) => acc + x.data.amount, 0);

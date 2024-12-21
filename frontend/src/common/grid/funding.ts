@@ -4,43 +4,43 @@ import { IncomePeriod, toPeriodValue } from '../period';
 import { getGridDuration, getGridsDuration } from './time';
 import { IncomeMode } from './trade';
 
-export const getGridTotal = (
+export const getGridFunding = (
   transaction: GridTransactionData,
   mode: IncomeMode,
 ) => {
-  const { total, amount } = transaction;
+  const { funding, amount } = transaction;
   if (mode === 'percent') {
-    return (total / amount) * 100;
+    return (funding / amount) * 100;
   }
   if (mode === 'usdt') {
-    return total;
+    return funding;
   }
   return assertNever(mode);
 };
 
-export const getGridsTotal = (
+export const getGridsFunding = (
   transactions: GridTransactionData[],
   mode: IncomeMode,
-) => transactions.reduce((acc, x) => acc + getGridTotal(x, mode), 0);
+) => transactions.reduce((acc, x) => acc + getGridFunding(x, mode), 0);
 
-export const getGridPeriodTotal = (
+export const getGridPeriodFunding = (
   transaction: GridTransactionData,
   mode: IncomeMode,
   period: IncomePeriod,
 ) => {
-  const total = getGridTotal(transaction, mode);
+  const funding = getGridFunding(transaction, mode);
   const days = getGridDuration(transaction);
-  const daily = total / days;
+  const daily = funding / days;
   return toPeriodValue(daily, period);
 };
 
-export const getGridsPeriodTotal = (
+export const getGridsPeriodFunding = (
   transactions: GridTransactionData[],
   mode: IncomeMode,
   period: IncomePeriod,
 ) => {
-  const total = getGridsTotal(transactions, mode);
+  const funding = getGridsFunding(transactions, mode);
   const days = getGridsDuration(transactions);
-  const daily = total / days;
+  const daily = funding / days;
   return toPeriodValue(daily, period);
 };
