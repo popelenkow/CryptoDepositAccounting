@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import {
+  GridTransactionSelectType,
   GridTransactionSort,
   GridTransactionStatus,
 } from '../../../api/backend/select/grid';
@@ -8,6 +9,7 @@ import { IncomePeriod } from '../../../common/period';
 
 export type GridOptionsState = {
   status: GridTransactionStatus;
+  selectType: GridTransactionSelectType;
   mode: IncomeMode;
   prediction: IncomePrediction;
   period: IncomePeriod;
@@ -15,6 +17,7 @@ export type GridOptionsState = {
 };
 const defaultState: GridOptionsState = {
   status: 'actual',
+  selectType: 'all',
   mode: 'percent',
   prediction: 'pessimistic',
   period: 'daily',

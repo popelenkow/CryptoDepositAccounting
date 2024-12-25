@@ -8,12 +8,11 @@ import { getGridPeriodTrades, getGridTrades } from '../../../common/grid/trade';
 import { getTransactionsOptions } from '../endpoints';
 import { Transaction } from '../types';
 
-export type GridTransactionStatus = 'actual' | 'history' | 'all';
-
 const checkGridTransaction = (
   transaction: Transaction,
 ): transaction is Transaction<'grid'> => transaction.data.type === 'grid';
 
+export type GridTransactionStatus = 'actual' | 'history' | 'all';
 const checkGridTransactionStatusMap: Record<
   GridTransactionStatus,
   (transaction: Transaction<'grid'>) => boolean
@@ -21,6 +20,33 @@ const checkGridTransactionStatusMap: Record<
   actual: (transaction) => transaction.data.close === 'pending',
   history: (transaction) => transaction.data.close !== 'pending',
   all: () => true,
+};
+
+export const uniqueInstrument = (
+  transaction: Transaction<'grid'>,
+  index: number,
+  transactions: Transaction<'grid'>[],
+) => {
+  const i = transactions.findIndex(
+    (x) => x.data.instrument === transaction.data.instrument,
+  );
+  return i === index;
+};
+
+export type GridTransactionSelectType = 'highest' | 'lowest' | 'all';
+const selectGridTransactionsMap: Record<
+  GridTransactionSelectType,
+  (transactions: Transaction<'grid'>[]) => Transaction<'grid'>[]
+> = {
+  highest: (transactions) =>
+    transactions
+      .sort((a, b) => a.data.minPrice - b.data.minPrice)
+      .filter(uniqueInstrument),
+  lowest: (transactions) =>
+    transactions
+      .sort((a, b) => b.data.minPrice - a.data.minPrice)
+      .filter(uniqueInstrument),
+  all: (transactions) => transactions,
 };
 
 export type GridTransactionSortOrder = 'asc' | 'desc';
@@ -92,15 +118,27 @@ const getSort = (sort?: GridTransactionSort) => {
   };
 };
 
+export type getGridTransactionsOptionsArgs = {
+  status?: GridTransactionStatus;
+  selectType?: GridTransactionSelectType;
+  sort?: GridTransactionSort;
+};
 export const getGridTransactionsOptions = (
-  status: GridTransactionStatus,
-  sort?: GridTransactionSort,
-) =>
-  queryOptions({
+  args: getGridTransactionsOptionsArgs,
+) => {
+  const { status = 'all', selectType = 'all', sort } = args;
+  return queryOptions({
     ...getTransactionsOptions,
-    select: (transactions) =>
-      transactions
-        .filter(checkGridTransaction)
-        .filter(checkGridTransactionStatusMap[status])
-        .sort(getSort(sort)),
+    select: (transactions) => {
+      const grids = transactions.filter(checkGridTransaction);
+
+      const checkStatus = checkGridTransactionStatusMap[status];
+      const statusGrids = grids.filter(checkStatus);
+
+      const select = selectGridTransactionsMap[selectType];
+      const selectedGrids = select(statusGrids);
+
+      return selectedGrids.sort(getSort(sort));
+    },
   });
+};

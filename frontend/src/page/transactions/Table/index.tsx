@@ -10,7 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import { getGridTransactionsOptions } from '../../../api/backend/select/grid';
-import { customScrollbarSx } from '../../../components/CustomScrollbar';
+import { customScrollbarSx } from '../../../components/CustomScrollbar/common';
 import { LinearLoader } from '../../../components/LinearLoader';
 import { useGridOptionsStore } from '../Options/store';
 import { GridsBodyRow } from './Body/Row';
@@ -19,8 +19,11 @@ import { GridsHeadAllRow } from './HeadAll/Row';
 
 export const TransactionsPageTable: FC = () => {
   const status = useGridOptionsStore((options) => options.status);
+  const selectType = useGridOptionsStore((options) => options.selectType);
   const sort = useGridOptionsStore((options) => options.sort);
-  const transactions = useQuery(getGridTransactionsOptions(status, sort));
+  const transactions = useQuery(
+    getGridTransactionsOptions({ status, selectType, sort }),
+  );
 
   return (
     <TableContainer sx={customScrollbarSx}>

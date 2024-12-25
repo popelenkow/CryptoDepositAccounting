@@ -1,13 +1,10 @@
 import { Stack, TableCell, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
-import { getGridTransactionsOptions } from '../../../../api/backend/select/grid';
 import { currencySymbols } from '../../../../common/currency';
-import { useGridOptionsStore } from '../../Options/store';
+import { useGridList } from '../../useGridList';
 
 export const GridsHeadAllDeposit: FC = () => {
-  const status = useGridOptionsStore((options) => options.status);
-  const list = useQuery(getGridTransactionsOptions(status)).data ?? [];
+  const list = useGridList();
 
   const deposit = list.reduce((acc, x) => acc + x.data.amount, 0);
   const leverage =

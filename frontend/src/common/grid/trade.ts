@@ -13,7 +13,7 @@ export const isGridOutOfTrade = (transaction: GridTransactionData) => {
   return close === 'pending' && currentPrice < minPrice;
 };
 
-export const getGridTradeCoin = (
+export const getGridTradeQuantity = (
   transaction: GridTransactionData,
   instrumentInfo: InstrumentInfo,
 ) => {
@@ -23,8 +23,8 @@ export const getGridTradeCoin = (
     (acc, p) => acc + (p < startPrice ? startPrice : p),
     0,
   );
-  const coin = (amount * leverage) / totalPrices;
-  return coin;
+  const quantity = (amount * leverage) / totalPrices;
+  return quantity;
 };
 
 export const getGridTrade = (

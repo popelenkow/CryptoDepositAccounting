@@ -1,5 +1,4 @@
-import { Box, SxProps } from '@mui/material';
-import { FC, PropsWithChildren } from 'react';
+import { SxProps } from '@mui/material';
 
 export const customScrollbarSx: SxProps = {
   overflowY: 'auto',
@@ -17,8 +16,4 @@ export const customScrollbarSx: SxProps = {
       backgroundColor: 'rgba(255, 255, 255, 0.4)',
     },
   },
-};
-export const CustomScrollbar: FC<PropsWithChildren> = (props) => {
-  const { children } = props;
-  return <Box sx={customScrollbarSx}>{children}</Box>;
 };

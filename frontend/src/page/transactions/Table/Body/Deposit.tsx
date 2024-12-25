@@ -5,7 +5,7 @@ import { getInstrumentInfosOptions } from '../../../../api/backend/endpoints';
 import { GridTransactionData } from '../../../../api/backend/types';
 import { assertDefined } from '../../../../common/assert';
 import { currencySymbols } from '../../../../common/currency';
-import { getGridTradeCoin } from '../../../../common/grid/trade';
+import { getGridTradeQuantity } from '../../../../common/grid/trade';
 
 export type GridsBodyDepositProps = {
   transaction: GridTransactionData;
@@ -23,7 +23,7 @@ export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
     instrumentInfos.data.find((x) => x.instrument === transaction.instrument),
   );
 
-  const coins = getGridTradeCoin(transaction, instrumentInfo).toFixed(2);
+  const quantity = getGridTradeQuantity(transaction, instrumentInfo).toFixed(2);
 
   return (
     <TableCell align='right'>
@@ -42,8 +42,8 @@ export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
         <Typography>{transaction.grids}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Coins:</Typography>
-        <Typography>{coins}</Typography>
+        <Typography>Quantity:</Typography>
+        <Typography>{quantity}</Typography>
       </Stack>
     </TableCell>
   );
