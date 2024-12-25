@@ -1,4 +1,4 @@
-import { GridTransactionData } from '../../api/types';
+import { GridTransactionData } from '../../api/backend/types';
 import { mapSecondsToDays } from '../time';
 
 export const getGridDuration = (transaction: GridTransactionData) => {

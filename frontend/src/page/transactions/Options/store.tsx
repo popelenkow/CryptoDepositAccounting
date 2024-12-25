@@ -1,36 +1,27 @@
 import { create } from 'zustand';
+import {
+  GridTransactionSort,
+  GridTransactionStatus,
+} from '../../../api/backend/select/grid';
 import { IncomeMode, IncomePrediction } from '../../../common/grid/trade';
 import { IncomePeriod } from '../../../common/period';
 
-export type GridOptionsStatus = 'actual' | 'history';
-export type GridOptionsSortType =
-  | 'id'
-  | 'instrument'
-  | 'pricePercent'
-  | 'duration'
-  | 'totalPercent'
-  | 'totalUsdt'
-  | 'gridPeriodPercent'
-  | 'gridPeriodUsdt'
-  | 'gridTotalPercent'
-  | 'gridTotalUsdt';
-export type GridOptionsSortOrder = 'asc' | 'desc';
-
 export type GridOptionsState = {
-  status: GridOptionsStatus;
+  status: GridTransactionStatus;
   mode: IncomeMode;
   prediction: IncomePrediction;
   period: IncomePeriod;
-  sortType: GridOptionsSortType;
-  sortOrder: GridOptionsSortOrder;
+  sort: GridTransactionSort;
 };
 const defaultState: GridOptionsState = {
   status: 'actual',
   mode: 'percent',
   prediction: 'pessimistic',
   period: 'daily',
-  sortType: 'gridPeriodPercent',
-  sortOrder: 'desc',
+  sort: {
+    order: 'desc',
+    type: 'gridPeriodPercent',
+  },
 };
 
 export const useGridOptionsStore = create<GridOptionsState>(() => ({

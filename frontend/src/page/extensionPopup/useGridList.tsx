@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getTransactionsOptions } from '../../api/endpoints';
-import { Transaction } from '../../api/types';
+import { getTransactionsOptions } from '../../api/backend/endpoints';
+import { Transaction } from '../../api/backend/types';
 
 export const useGridList = () => {
   const transactions = useQuery(getTransactionsOptions);

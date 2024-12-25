@@ -1,18 +1,20 @@
 import { Stack, TableCell, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
+import { getGridTransactionsOptions } from '../../../../api/backend/select/grid';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridsPeriodFunding } from '../../../../common/grid/funding';
 import { getGridsPeriodSpot } from '../../../../common/grid/spot';
 import { getGridsPeriodTotal } from '../../../../common/grid/total';
 import { getGridsPeriodTrades } from '../../../../common/grid/trade';
 import { useGridOptionsStore } from '../../Options/store';
-import { useGridList } from '../../useGridList';
 
 export const GridsHeadAllPeriodProfit: FC = () => {
-  const list = useGridList();
   const mode = useGridOptionsStore((state) => state.mode);
   const prediction = useGridOptionsStore((state) => state.prediction);
   const period = useGridOptionsStore((state) => state.period);
+  const status = useGridOptionsStore((options) => options.status);
+  const list = useQuery(getGridTransactionsOptions(status)).data ?? [];
 
   const symbol =
     mode === 'usdt' ? currencySymbols.usdt : currencySymbols.percent;

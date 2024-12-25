@@ -1,4 +1,4 @@
-import { GridTransactionData, InstrumentInfo } from '../../api/types';
+import { GridTransactionData, InstrumentInfo } from '../../api/backend/types';
 import { assertNever } from '../assert';
 import { IncomePeriod, toPeriodValue } from '../period';
 import { commissions } from '../transaction';

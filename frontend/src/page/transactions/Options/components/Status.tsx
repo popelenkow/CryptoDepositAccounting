@@ -1,10 +1,12 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { FC } from 'react';
-import { GridOptionsStatus, useGridOptionsStore } from '../store';
+import { GridTransactionStatus } from '../../../../api/backend/select/grid';
+import { useGridOptionsStore } from '../store';
 
-const statuses: Record<GridOptionsStatus, string> = {
+const statuses: Record<GridTransactionStatus, string> = {
   actual: 'Actual',
   history: 'History',
+  all: 'All',
 };
 
 export const TransactionsPageOptionsStatus: FC = () => {
@@ -16,7 +18,7 @@ export const TransactionsPageOptionsStatus: FC = () => {
       size='small'
       value={status}
       exclusive
-      onChange={(_, status: GridOptionsStatus) => {
+      onChange={(_, status: GridTransactionStatus) => {
         useGridOptionsStore.setState({ status });
       }}
     >

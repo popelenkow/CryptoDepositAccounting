@@ -1,3 +1,10 @@
+import {
+  GridTransactionData,
+  GridTransactionHistoryOrder,
+  GridTransactionHistoryOrderPair,
+  GridTransactionOrder,
+  Transaction,
+} from '../../../api/backend/types';
 import { FutureGrid } from '../../../api/bybit/types/grid';
 import { FutureGridDetail } from '../../../api/bybit/types/gridDetail';
 import {
@@ -5,13 +12,6 @@ import {
   GridHistoryOrderPair,
 } from '../../../api/bybit/types/gridHistoryOrder';
 import { GridOrdersResult } from '../../../api/bybit/types/gridOrder';
-import {
-  GridTransactionData,
-  GridTransactionHistoryOrder,
-  GridTransactionHistoryOrderPair,
-  GridTransactionOrder,
-  Transaction,
-} from '../../../api/types';
 
 type GridTransactionInfo = Pick<
   GridTransactionData,

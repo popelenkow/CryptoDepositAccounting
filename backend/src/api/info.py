@@ -8,7 +8,7 @@ from utils.time import getCurrentDualStartTime, getCurrentTime
 infoRouter = APIRouter(prefix="/api/info")
 
 
-@infoRouter.get("/")
+@infoRouter.get("")
 def requestGetInfo() -> Info:
     return getInfo()
 

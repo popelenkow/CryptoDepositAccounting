@@ -1,5 +1,7 @@
 import { Stack, TableCell, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
+import { getGridTransactionsOptions } from '../../../../api/backend/select/grid';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridsFunding } from '../../../../common/grid/funding';
@@ -7,11 +9,11 @@ import { getGridsSpot } from '../../../../common/grid/spot';
 import { getGridsTotal } from '../../../../common/grid/total';
 import { getGridsTrades } from '../../../../common/grid/trade';
 import { useGridOptionsStore } from '../../Options/store';
-import { useGridList } from '../../useGridList';
 
 export const GridsHeadAllTotalProfit: FC = () => {
-  const list = useGridList();
   const mode = useGridOptionsStore((state) => state.mode);
+  const status = useGridOptionsStore((options) => options.status);
+  const list = useQuery(getGridTransactionsOptions(status)).data ?? [];
 
   const symbol = currencySymbols[mode];
 

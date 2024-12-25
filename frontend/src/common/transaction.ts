@@ -1,4 +1,4 @@
-import { TransactionData } from '../api/types';
+import { TransactionData } from '../api/backend/types';
 import { Currency, currencySymbols } from '../common/currency';
 
 export const commissions = {

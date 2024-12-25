@@ -1,8 +1,8 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
-import { getInstrumentInfosOptions } from '../../../../api/endpoints';
-import { GridTransactionData } from '../../../../api/types';
+import { getInstrumentInfosOptions } from '../../../../api/backend/endpoints';
+import { GridTransactionData } from '../../../../api/backend/types';
 import { assertDefined } from '../../../../common/assert';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridTradeCoin } from '../../../../common/grid/trade';

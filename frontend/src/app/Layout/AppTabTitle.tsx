@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { FC, useEffect } from 'react';
-import { getInfoOptions } from '../../api/endpoints';
+import { getInfoOptions } from '../../api/backend/endpoints';
 
 export const AppTabTitle: FC = () => {
   const info = useQuery(getInfoOptions);

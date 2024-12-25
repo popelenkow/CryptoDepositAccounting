@@ -1,10 +1,13 @@
 import { Stack, TableCell, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
+import { getGridTransactionsOptions } from '../../../../api/backend/select/grid';
 import { getGridsDuration } from '../../../../common/grid/time';
-import { useGridList } from '../../useGridList';
+import { useGridOptionsStore } from '../../Options/store';
 
 export const GridsHeadAllTime: FC = () => {
-  const list = useGridList();
+  const status = useGridOptionsStore((options) => options.status);
+  const list = useQuery(getGridTransactionsOptions(status)).data ?? [];
 
   const transactions = list.map((x) => x.data);
 

@@ -1,6 +1,6 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
-import { GridTransactionData } from '../../../../api/types';
+import { GridTransactionData } from '../../../../api/backend/types';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridPeriodFunding } from '../../../../common/grid/funding';
 import { getGridPeriodSpot } from '../../../../common/grid/spot';
@@ -33,27 +33,19 @@ export const GridsBodyPeriodProfit: FC<GridsBodyPeriodProfitProps> = (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography>Total:</Typography>
-        <Typography>
-          {toPreview(total)}
-        </Typography>
+        <Typography>{toPreview(total)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography>Spot:</Typography>
-        <Typography>
-          {toPreview(spot)}
-        </Typography>
+        <Typography>{toPreview(spot)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography>Funding:</Typography>
-        <Typography>
-          {toPreview(funding)}
-        </Typography>
+        <Typography>{toPreview(funding)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography>Grid:</Typography>
-        <Typography>
-          {toPreview(grid)}
-        </Typography>
+        <Typography>{toPreview(grid)}</Typography>
       </Stack>
     </TableCell>
   );

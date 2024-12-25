@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
-import { mutationOptions, queryClient } from './queryClient';
-import { createRequest } from './request';
+import { mutationOptions, queryClient } from '../queryClient';
+import { createRequest } from '../request';
 import {
   DualOffer,
   Info,
@@ -46,15 +46,6 @@ export const getTransactionsOptions = queryOptions({
       method: 'get',
       endpoint: '/api/transaction/list',
     }),
-});
-
-export const getGridTransactionsOptions = queryOptions({
-  ...getTransactionsOptions,
-  select: (transactions) =>
-    transactions.filter(
-      (transaction): transaction is Transaction<'grid'> =>
-        transaction.data.type === 'grid',
-    ),
 });
 
 export const addTransactionOptions = mutationOptions({

@@ -14,7 +14,7 @@ from db.transaction import (
 transactionRouter = APIRouter(prefix="/api/transaction")
 
 
-@transactionRouter.post("/")
+@transactionRouter.post("")
 def requestAddTransaction(data: TransactionData) -> Transaction:
     try:
         return addTransaction(data)

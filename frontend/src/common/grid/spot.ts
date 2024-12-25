@@ -1,4 +1,4 @@
-import { GridTransactionData } from '../../api/types';
+import { GridTransactionData } from '../../api/backend/types';
 import { IncomePeriod, toPeriodValue } from '../period';
 import { getGridFunding } from './funding';
 import { getGridDuration, getGridsDuration } from './time';

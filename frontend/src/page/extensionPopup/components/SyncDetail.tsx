@@ -2,12 +2,12 @@ import SyncIcon from '@mui/icons-material/Sync';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
+import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import {
   getGridDetailOptions,
   getGridHistoryOrdersOptions,
   getGridOrdersOptions,
 } from '../../../api/bybit/endpoints';
-import { importTransactionsOptions } from '../../../api/endpoints';
 import { injectTransactionDetail } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';

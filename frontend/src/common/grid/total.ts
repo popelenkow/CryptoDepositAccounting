@@ -1,4 +1,4 @@
-import { GridTransactionData } from '../../api/types';
+import { GridTransactionData } from '../../api/backend/types';
 import { assertNever } from '../assert';
 import { IncomePeriod, toPeriodValue } from '../period';
 import { getGridDuration, getGridsDuration } from './time';

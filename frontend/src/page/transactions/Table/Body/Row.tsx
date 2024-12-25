@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@mui/material';
 import { memo } from 'react';
-import { Transaction } from '../../../../api/types';
+import { Transaction } from '../../../../api/backend/types';
 import { GridsBodyDeposit } from './Deposit';
 import { GridsBodyPeriodProfit } from './PeriodProfit';
 import { GridsBodyPrice } from './Price';

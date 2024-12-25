@@ -1,6 +1,6 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
-import { GridTransactionData } from '../../../../api/types';
+import { GridTransactionData } from '../../../../api/backend/types';
 import { getRangeRatioColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
 import {
