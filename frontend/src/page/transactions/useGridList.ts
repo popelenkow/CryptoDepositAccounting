@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { getInstrumentInfosOptions } from '../../api/backend/endpoints';
 import {
   getGridTransactionsOptions,
   GridTransactionSort,
@@ -16,5 +17,9 @@ export const useGridList = (sort?: GridTransactionSort) => {
     sort,
   });
   const list = useQuery(options).data ?? [];
+  const q = useQuery(getInstrumentInfosOptions).data?.find(
+    (x) => x.instrument === 'FTMUSDT',
+  );
+  console.log(q);
   return list;
 };

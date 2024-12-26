@@ -24,24 +24,6 @@ class DualTransactionData(BaseModelWithUndefined):
     close: Literal["pending", "earn", "exchange"]
 
 
-class GridTransactionHistoryOrder(BaseModelWithUndefined):
-    price: float
-    quantity: float
-    fee: float
-
-
-class GridTransactionHistoryOrderPair(BaseModelWithUndefined):
-    profit: float
-    buy: Optional[GridTransactionHistoryOrder] = None
-    sell: Optional[GridTransactionHistoryOrder] = None
-
-
-class GridTransactionOrder(BaseModelWithUndefined):
-    type: Literal["buy", "sell"]
-    price: float
-    quantity: float
-
-
 class GridTransactionData(BaseModelWithUndefined):
     orderId: str
     type: Literal["grid"]
@@ -61,8 +43,6 @@ class GridTransactionData(BaseModelWithUndefined):
     total: float
     funding: float
     close: Literal["pending", "manual", "auto"]
-    historyOrders: Optional[List[GridTransactionHistoryOrderPair]] = None
-    orders: Optional[List[GridTransactionOrder]] = None
     lastUpdate: Union[str, Literal["open", "close"]]
 
 

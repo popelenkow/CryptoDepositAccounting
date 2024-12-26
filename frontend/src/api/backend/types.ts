@@ -43,23 +43,6 @@ export type DualTransactionData = {
   close: 'pending' | 'earn' | 'exchange';
 };
 
-export type GridTransactionHistoryOrder = {
-  price: number;
-  quantity: number;
-  fee: number;
-};
-export type GridTransactionHistoryOrderPair = {
-  profit: number;
-  buy?: GridTransactionHistoryOrder;
-  sell?: GridTransactionHistoryOrder;
-};
-
-export type GridTransactionOrder = {
-  type: 'buy' | 'sell';
-  price: number;
-  quantity: number;
-};
-
 export type GridTransactionData = {
   orderId: string;
   type: 'grid';
@@ -79,8 +62,6 @@ export type GridTransactionData = {
   total: number;
   funding: number;
   close: 'pending' | 'manual' | 'auto';
-  historyOrders?: GridTransactionHistoryOrderPair[];
-  orders?: GridTransactionOrder[];
   lastUpdate: string | 'open' | 'close';
 };
 

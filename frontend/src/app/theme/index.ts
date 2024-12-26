@@ -84,5 +84,12 @@ export const appTheme = createTheme({
         },
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: '8px',
+        },
+      },
+    },
   },
 });

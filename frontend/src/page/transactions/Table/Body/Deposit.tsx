@@ -23,7 +23,7 @@ export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
     instrumentInfos.data.find((x) => x.instrument === transaction.instrument),
   );
 
-  const quantity = getGridTradeQuantity(transaction, instrumentInfo).toFixed(2);
+  const quantity = getGridTradeQuantity(transaction, instrumentInfo);
 
   return (
     <TableCell align='right'>

@@ -10,6 +10,7 @@
     "checkTs": "tsc",
     "lint": "eslint . && prettier . --check",
     "lint:fix": "eslint . --fix && prettier . --write",
+    "test": "vitest",
     "gen-translation": "i18next -c ./i18next.parser.config.js",
     "preview": "vite preview"
   },
@@ -47,6 +48,7 @@
     "vite": "6.0.3",
     "vite-plugin-mkcert": "1.17.6",
     "vite-plugin-static-copy": "2.2.0",
+    "vitest": "2.1.8",
     "zustand": "5.0.2"
   }
 }

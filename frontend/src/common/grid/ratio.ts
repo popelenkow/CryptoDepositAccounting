@@ -1,7 +1,7 @@
 import { GridTransactionData, InstrumentInfo } from '../../api/backend/types';
 import { assertNever } from '../assert';
 import { getRatio } from '../ratio';
-import { floorTo, getDecimalPrecision } from '../value';
+import { ceilTo, floorTo, getDecimalPrecision } from '../value';
 
 export const getGridTradeRatio = (transaction: GridTransactionData) => {
   const { grids, minPrice, maxPrice } = transaction;
@@ -10,10 +10,11 @@ export const getGridTradeRatio = (transaction: GridTransactionData) => {
   return ratio;
 };
 
-export const getGridRangePrices = (
+export const getGridPrices = (
   transaction: GridTransactionData,
   instrumentInfo: InstrumentInfo,
-  side: 'low' | 'high',
+  side: 'buy' | 'sell',
+  floor = false,
 ) => {
   const { grids, minPrice } = transaction;
   const { priceStep } = instrumentInfo;
@@ -23,14 +24,14 @@ export const getGridRangePrices = (
 
   const arr: number[] = [];
   for (let i = 0; i <= grids; i++) {
-    const value = minPrice * Math.pow(ratio, i);
-    const rounded = floorTo(value, decimals);
-    arr.push(rounded);
+    let value = minPrice * Math.pow(ratio, i);
+    value = floor ? floorTo(value, decimals) : ceilTo(value, decimals);
+    arr.push(value);
   }
-  if (side === 'low') {
+  if (side === 'buy') {
     return arr.slice(0, arr.length - 1);
   }
-  if (side === 'high') {
+  if (side === 'sell') {
     return arr.slice(1);
   }
   return assertNever(side);

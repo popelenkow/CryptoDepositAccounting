@@ -1,28 +1,10 @@
-import {
-  GridTransactionData,
-  GridTransactionHistoryOrder,
-  GridTransactionHistoryOrderPair,
-  GridTransactionOrder,
-  Transaction,
-} from '../../../api/backend/types';
+import { GridTransactionData, Transaction } from '../../../api/backend/types';
 import { FutureGrid } from '../../../api/bybit/types/grid';
 import { FutureGridDetail } from '../../../api/bybit/types/gridDetail';
-import {
-  GridHistoryOrder,
-  GridHistoryOrderPair,
-} from '../../../api/bybit/types/gridHistoryOrder';
-import { GridOrdersResult } from '../../../api/bybit/types/gridOrder';
 
 type GridTransactionInfo = Pick<
   GridTransactionData,
-  | 'startPrice'
-  | 'endPrice'
-  | 'funding'
-  | 'startTime'
-  | 'endTime'
-  | 'historyOrders'
-  | 'orders'
-  | 'lastUpdate'
+  'startPrice' | 'endPrice' | 'funding' | 'startTime' | 'endTime' | 'lastUpdate'
 >;
 
 const getClose = (grid: FutureGrid): GridTransactionData['close'] => {
@@ -60,71 +42,8 @@ const toTransaction = (grid: FutureGrid): GridTransactionData => {
   return transaction;
 };
 
-const toTransactionHistoryOrders = (
-  orders?: GridHistoryOrderPair[],
-): GridTransactionHistoryOrderPair[] | undefined => {
-  if (!orders) {
-    return undefined;
-  }
-  const sorted = orders.sort(
-    (a, b) => Number(a.open_order.avg_price) - Number(b.open_order.avg_price),
-  );
-
-  const result = sorted.map((x): GridTransactionHistoryOrderPair => {
-    const [buy, sell] =
-      x.open_order.side === '1'
-        ? [x.open_order, x.close_order]
-        : [x.close_order, x.open_order];
-
-    const toOrder = (
-      x: GridHistoryOrder,
-    ): GridTransactionHistoryOrder | undefined => {
-      if (x.order_status === 'FUTURE_ORDER_STATUS_NEW') {
-        return undefined;
-      }
-      return {
-        price: Number(x.avg_price),
-        quantity: Number(x.quantity),
-        fee: Number(x.fee),
-      };
-    };
-    return {
-      profit: Number(x.profits),
-      buy: toOrder(buy),
-      sell: toOrder(sell),
-    };
-  });
-
-  return result;
-};
-
-const toTransactionOrders = (
-  orders?: GridOrdersResult,
-): GridTransactionOrder[] | undefined => {
-  if (!orders) {
-    return undefined;
-  }
-  const buys = orders.buys.map(
-    (x): GridTransactionOrder => ({
-      type: 'buy',
-      price: Number(x.price),
-      quantity: Number(x.quantity),
-    }),
-  );
-  const sells = orders.sells.map(
-    (x): GridTransactionOrder => ({
-      type: 'sell',
-      price: Number(x.price),
-      quantity: Number(x.quantity),
-    }),
-  );
-  return [...buys, ...sells].sort((a, b) => a.price - b.price);
-};
-
 const toTransactionInfo = (
   rawDetail: FutureGridDetail & { timestamp: string },
-  historyOrders: GridHistoryOrderPair[],
-  orders?: GridOrdersResult,
 ): GridTransactionInfo => {
   const pending = rawDetail.status === 'RUNNING';
 
@@ -137,8 +56,6 @@ const toTransactionInfo = (
     lastUpdate: pending
       ? new Date(Number(rawDetail.timestamp) * 1000).toISOString()
       : 'close',
-    historyOrders: toTransactionHistoryOrders(historyOrders),
-    orders: toTransactionOrders(orders),
   };
   return detail;
 };
@@ -171,8 +88,6 @@ const mapInfo = (
     endTime: transaction.endTime,
     funding: transaction.funding,
     lastUpdate: transaction.lastUpdate,
-    historyOrders: transaction.historyOrders,
-    orders: transaction.orders,
   };
 };
 
@@ -189,10 +104,8 @@ export const createTransaction = (
 export const injectTransactionDetail = (
   data: GridTransactionData,
   detail: FutureGridDetail & { timestamp: string },
-  historyOrders: GridHistoryOrderPair[],
-  orders?: GridOrdersResult,
 ): GridTransactionData => {
-  const info = toTransactionInfo(detail, historyOrders, orders);
+  const info = toTransactionInfo(detail);
   const result = mergeTransactionInfo(data, info);
   return result;
 };

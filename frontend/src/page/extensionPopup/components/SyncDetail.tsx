@@ -3,11 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
-import {
-  getGridDetailOptions,
-  getGridHistoryOrdersOptions,
-  getGridOrdersOptions,
-} from '../../../api/bybit/endpoints';
+import { getGridDetailOptions } from '../../../api/bybit/endpoints';
 import { mapSecondsToDays } from '../../../common/time';
 import { injectTransactionDetail } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
@@ -19,8 +15,6 @@ export const SyncDetail: FC = () => {
 
   const importTransactions = useMutation(importTransactionsOptions);
   const getGridDetail = useMutation(getGridDetailOptions(tabId));
-  const getGridHistoryOrders = useMutation(getGridHistoryOrdersOptions(tabId));
-  const getGridOrders = useMutation(getGridOrdersOptions(tabId));
 
   if (!tabId) return null;
 
@@ -41,7 +35,7 @@ export const SyncDetail: FC = () => {
 
   const getText = () => {
     if (outdatedTransactions.length > 0) {
-      return `${outdatedTransactions.length} outdated transactions`;
+      return `${outdatedTransactions.length} outdated`;
     }
     if (sortedTransactions.length > 0) {
       const today = new Date().getTime();
@@ -56,12 +50,7 @@ export const SyncDetail: FC = () => {
   return (
     <LoadingButton
       variant='contained'
-      loading={
-        importTransactions.isPending ||
-        getGridDetail.isPending ||
-        getGridHistoryOrders.isPending ||
-        getGridOrders.isPending
-      }
+      loading={importTransactions.isPending || getGridDetail.isPending}
       loadingPosition='end'
       endIcon={<SyncIcon />}
       onClick={async () => {
@@ -76,17 +65,10 @@ export const SyncDetail: FC = () => {
         const promise = transactions.map(async (transaction) => {
           const { orderId } = transaction.data;
           const detail = await getGridDetail.mutateAsync(orderId);
-          const historyOrders = await getGridHistoryOrders.mutateAsync(orderId);
-          const orders =
-            detail.result.detail.status === 'RUNNING'
-              ? await getGridOrders.mutateAsync(orderId)
-              : undefined;
-          const data = injectTransactionDetail(
-            transaction.data,
-            { ...detail.result.detail, timestamp: detail.time_now },
-            historyOrders.result.pairs,
-            orders?.result,
-          );
+          const data = injectTransactionDetail(transaction.data, {
+            ...detail.result.detail,
+            timestamp: detail.time_now,
+          });
           return data;
         });
         const newTransactions = await Promise.all(promise);

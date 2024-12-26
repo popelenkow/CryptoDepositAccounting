@@ -2,7 +2,8 @@ import { GridTransactionData, InstrumentInfo } from '../../api/backend/types';
 import { assertNever } from '../assert';
 import { IncomePeriod, toPeriodValue } from '../period';
 import { commissions } from '../transaction';
-import { getGridRangePrices, getGridTradeRatio } from './ratio';
+import { floorTo } from '../value';
+import { getGridTradeRatio } from './ratio';
 import { getGridDuration, getGridsDuration } from './time';
 
 export type IncomeMode = 'usdt' | 'percent';
@@ -17,14 +18,14 @@ export const getGridTradeQuantity = (
   transaction: GridTransactionData,
   instrumentInfo: InstrumentInfo,
 ) => {
-  const { amount, leverage, startPrice } = transaction;
-  const prices = getGridRangePrices(transaction, instrumentInfo, 'low');
-  const totalPrices = prices.reduce(
-    (acc, p) => acc + (p < startPrice ? startPrice : p),
-    0,
-  );
+  const { amount, leverage, maxPrice, grids } = transaction;
+  // ToDo: Experience has shown that the calculation is based on the maximum price.
+  const totalPrices = (grids + 1) * maxPrice;
   const quantity = (amount * leverage) / totalPrices;
-  return quantity;
+  const decimals = -Math.log10(instrumentInfo.quantityStep);
+  // ToDo: There is no exact explanation why this is so, it’s just that the Bybit allocates slightly less money.
+  const bybitCorrection = 0.95;
+  return floorTo(quantity * bybitCorrection, decimals);
 };
 
 export const getGridTrade = (
