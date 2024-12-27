@@ -1,29 +1,15 @@
-import {
-  lighten,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { lighten, Table, TableContainer, TableHead } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import { getGridTransactionsOptions } from '../../../api/backend/select/grid';
 import { customScrollbarSx } from '../../../components/CustomScrollbar/common';
 import { LinearLoader } from '../../../components/LinearLoader';
-import { useGridOptionsStore } from '../Options/store';
-import { GridsBodyRow } from './Body/Row';
+import { GridsBody } from './Body';
 import { GridsHeadRow } from './Head/Row';
 import { GridsHeadAllRow } from './HeadAll/Row';
 
 export const TransactionsPageTable: FC = () => {
-  const status = useGridOptionsStore((options) => options.status);
-  const selectType = useGridOptionsStore((options) => options.selectType);
-  const sort = useGridOptionsStore((options) => options.sort);
-  const transactions = useQuery(
-    getGridTransactionsOptions({ status, selectType, sort }),
-  );
+  const transactions = useQuery(getGridTransactionsOptions());
 
   return (
     <TableContainer sx={customScrollbarSx}>
@@ -47,20 +33,9 @@ export const TransactionsPageTable: FC = () => {
           }}
         >
           <GridsHeadRow />
-          {!!transactions.data?.length && <GridsHeadAllRow />}
+          <GridsHeadAllRow />
         </TableHead>
-        <TableBody>
-          {transactions.data?.map((transaction) => (
-            <GridsBodyRow key={transaction.id} transaction={transaction} />
-          ))}
-          {!transactions.data?.length && (
-            <TableRow>
-              <TableCell colSpan={100} align='center'>
-                Empty list
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
+        <GridsBody />
       </Table>
     </TableContainer>
   );

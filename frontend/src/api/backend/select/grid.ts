@@ -124,9 +124,9 @@ export type getGridTransactionsOptionsArgs = {
   sort?: GridTransactionSort;
 };
 export const getGridTransactionsOptions = (
-  args: getGridTransactionsOptionsArgs,
+  args?: getGridTransactionsOptionsArgs,
 ) => {
-  const { status = 'all', selectType = 'all', sort } = args;
+  const { status = 'all', selectType = 'all', sort } = args ?? {};
   return queryOptions({
     ...getTransactionsOptions,
     select: (transactions) => {
