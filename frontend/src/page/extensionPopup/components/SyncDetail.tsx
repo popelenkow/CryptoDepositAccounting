@@ -8,6 +8,7 @@ import {
   getGridHistoryOrdersOptions,
   getGridOrdersOptions,
 } from '../../../api/bybit/endpoints';
+import { mapSecondsToDays } from '../../../common/time';
 import { injectTransactionDetail } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
@@ -23,13 +24,34 @@ export const SyncDetail: FC = () => {
 
   if (!tabId) return null;
 
-  const openTransactions = list.filter((x) => {
-    const { close, detailTimestamp } = x.data;
+  const outdatedTransactions = list.filter((x) => {
+    const { close, lastUpdate } = x.data;
     if (close === 'pending') {
-      return detailTimestamp === 'open';
+      return lastUpdate === 'open';
     }
-    return detailTimestamp !== 'close';
+    return lastUpdate !== 'close';
   });
+  const sortedTransactions = list
+    .filter((x) => x.data.close === 'pending')
+    .sort(
+      (a, b) =>
+        new Date(a.data.lastUpdate).getTime() -
+        new Date(b.data.lastUpdate).getTime(),
+    );
+
+  const getText = () => {
+    if (outdatedTransactions.length > 0) {
+      return `${outdatedTransactions.length} outdated transactions`;
+    }
+    if (sortedTransactions.length > 0) {
+      const today = new Date().getTime();
+      const lastUpdate = new Date(
+        sortedTransactions[0].data.lastUpdate,
+      ).getTime();
+      return `${mapSecondsToDays((today - lastUpdate) / 1000).toFixed(2)} days`;
+    }
+    return '';
+  };
 
   return (
     <LoadingButton
@@ -43,7 +65,13 @@ export const SyncDetail: FC = () => {
       loadingPosition='end'
       endIcon={<SyncIcon />}
       onClick={async () => {
-        const transactions = openTransactions.slice(0, 5);
+        const getTransactions = () => {
+          if (outdatedTransactions.length > 0) {
+            return outdatedTransactions;
+          }
+          return sortedTransactions;
+        };
+        const transactions = getTransactions().slice(0, 5);
 
         const promise = transactions.map(async (transaction) => {
           const { orderId } = transaction.data;
@@ -55,7 +83,7 @@ export const SyncDetail: FC = () => {
               : undefined;
           const data = injectTransactionDetail(
             transaction.data,
-            detail.result.detail,
+            { ...detail.result.detail, timestamp: detail.time_now },
             historyOrders.result.pairs,
             orders?.result,
           );
@@ -66,7 +94,7 @@ export const SyncDetail: FC = () => {
         importTransactions.mutate(newTransactions);
       }}
     >
-      {`Sync detail (${openTransactions.length})`}
+      {`Sync detail (${getText()})`}
     </LoadingButton>
   );
 };

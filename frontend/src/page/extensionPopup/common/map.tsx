@@ -18,11 +18,11 @@ type GridTransactionInfo = Pick<
   | 'startPrice'
   | 'endPrice'
   | 'funding'
-  | 'detailTimestamp'
   | 'startTime'
   | 'endTime'
   | 'historyOrders'
   | 'orders'
+  | 'lastUpdate'
 >;
 
 const getClose = (grid: FutureGrid): GridTransactionData['close'] => {
@@ -55,7 +55,7 @@ const toTransaction = (grid: FutureGrid): GridTransactionData => {
     total: Number(grid.pnl),
     funding: 0,
     close: getClose(grid),
-    detailTimestamp: 'open',
+    lastUpdate: 'open',
   };
   return transaction;
 };
@@ -122,7 +122,7 @@ const toTransactionOrders = (
 };
 
 const toTransactionInfo = (
-  rawDetail: FutureGridDetail,
+  rawDetail: FutureGridDetail & { timestamp: string },
   historyOrders: GridHistoryOrderPair[],
   orders?: GridOrdersResult,
 ): GridTransactionInfo => {
@@ -134,7 +134,9 @@ const toTransactionInfo = (
     startTime: new Date(Number(rawDetail.create_time)).toISOString(),
     endTime: new Date(Number(rawDetail.end_time)).toISOString(),
     funding: -Number(rawDetail.funding_fee),
-    detailTimestamp: pending ? 1 : 'close',
+    lastUpdate: pending
+      ? new Date(Number(rawDetail.timestamp) * 1000).toISOString()
+      : 'close',
     historyOrders: toTransactionHistoryOrders(historyOrders),
     orders: toTransactionOrders(orders),
   };
@@ -168,7 +170,7 @@ const mapInfo = (
     startTime: transaction.startTime,
     endTime: transaction.endTime,
     funding: transaction.funding,
-    detailTimestamp: transaction.detailTimestamp,
+    lastUpdate: transaction.lastUpdate,
     historyOrders: transaction.historyOrders,
     orders: transaction.orders,
   };
@@ -186,7 +188,7 @@ export const createTransaction = (
 
 export const injectTransactionDetail = (
   data: GridTransactionData,
-  detail: FutureGridDetail,
+  detail: FutureGridDetail & { timestamp: string },
   historyOrders: GridHistoryOrderPair[],
   orders?: GridOrdersResult,
 ): GridTransactionData => {

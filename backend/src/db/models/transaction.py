@@ -63,7 +63,7 @@ class GridTransactionData(BaseModelWithUndefined):
     close: Literal["pending", "manual", "auto"]
     historyOrders: Optional[List[GridTransactionHistoryOrderPair]] = None
     orders: Optional[List[GridTransactionOrder]] = None
-    detailTimestamp: Union[int, Literal["open", "close"]]
+    lastUpdate: Union[str, Literal["open", "close"]]
 
 
 TransactionDataUnion = Union[

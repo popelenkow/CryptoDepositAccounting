@@ -81,7 +81,7 @@ export type GridTransactionData = {
   close: 'pending' | 'manual' | 'auto';
   historyOrders?: GridTransactionHistoryOrderPair[];
   orders?: GridTransactionOrder[];
-  detailTimestamp: number | 'open' | 'close';
+  lastUpdate: string | 'open' | 'close';
 };
 
 type TransactionDataDict = {
