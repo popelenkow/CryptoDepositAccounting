@@ -9,6 +9,7 @@ import { IncomePeriod } from '../../../common/period';
 
 export type GridOptionsState = {
   status: GridTransactionStatus;
+  instruments: string[];
   selectType: GridTransactionSelectType;
   mode: IncomeMode;
   prediction: IncomePrediction;
@@ -17,6 +18,7 @@ export type GridOptionsState = {
 };
 const defaultState: GridOptionsState = {
   status: 'actual',
+  instruments: [],
   selectType: 'all',
   mode: 'percent',
   prediction: 'pessimistic',

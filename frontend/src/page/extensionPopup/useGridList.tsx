@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import { getGridTransactionsOptions } from '../../api/backend/select/grid';
+import {
+  getGridTransactionsOptions,
+  GridTransactionSort,
+} from '../../api/backend/select/grid';
 
+const sort: GridTransactionSort = {
+  order: 'desc',
+  type: 'id',
+};
 export const useGridList = () => {
-  const transactions = useQuery(getGridTransactionsOptions());
+  const transactions = useQuery(getGridTransactionsOptions({ sort }));
 
-  if (!transactions.data) {
-    return [];
-  }
-
-  const sortedGridList = transactions.data.sort((a, b) => b.id - a.id);
-
-  return sortedGridList;
+  return transactions.data ?? [];
 };

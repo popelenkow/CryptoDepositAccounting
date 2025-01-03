@@ -7,8 +7,14 @@ import { useGridOptionsStore } from './Options/store';
 
 export const useGridList = (sort?: GridTransactionSort) => {
   const status = useGridOptionsStore((options) => options.status);
+  const instruments = useGridOptionsStore((options) => options.instruments);
   const selectType = useGridOptionsStore((options) => options.selectType);
-  const options = getGridTransactionsOptions({ status, selectType, sort });
+  const options = getGridTransactionsOptions({
+    status,
+    instruments,
+    selectType,
+    sort,
+  });
   const list = useQuery(options).data ?? [];
   return list;
 };

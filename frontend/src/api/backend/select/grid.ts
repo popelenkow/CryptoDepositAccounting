@@ -120,13 +120,14 @@ const getSort = (sort?: GridTransactionSort) => {
 
 export type getGridTransactionsOptionsArgs = {
   status?: GridTransactionStatus;
+  instruments?: string[];
   selectType?: GridTransactionSelectType;
   sort?: GridTransactionSort;
 };
 export const getGridTransactionsOptions = (
   args?: getGridTransactionsOptionsArgs,
 ) => {
-  const { status = 'all', selectType = 'all', sort } = args ?? {};
+  const { status = 'all', instruments, selectType = 'all', sort } = args ?? {};
   return queryOptions({
     ...getTransactionsOptions,
     select: (transactions) => {
@@ -135,8 +136,14 @@ export const getGridTransactionsOptions = (
       const checkStatus = checkGridTransactionStatusMap[status];
       const statusGrids = grids.filter(checkStatus);
 
+      const selectInstruments = (transaction: Transaction<'grid'>) =>
+        instruments?.length
+          ? instruments.includes(transaction.data.instrument)
+          : true;
+      const instrumentGrids = statusGrids.filter(selectInstruments);
+
       const select = selectGridTransactionsMap[selectType];
-      const selectedGrids = select(statusGrids);
+      const selectedGrids = select(instrumentGrids);
 
       return selectedGrids.sort(getSort(sort));
     },
