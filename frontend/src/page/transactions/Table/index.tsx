@@ -2,7 +2,6 @@ import { lighten, Table, TableContainer, TableHead } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import { getGridTransactionsOptions } from '../../../api/backend/select/grid';
-import { customScrollbarSx } from '../../../components/CustomScrollbar/common';
 import { LinearLoader } from '../../../components/LinearLoader';
 import { GridsBody } from './Body';
 import { GridsHeadRow } from './Head/Row';
@@ -12,7 +11,7 @@ export const TransactionsPageTable: FC = () => {
   const transactions = useQuery(getGridTransactionsOptions());
 
   return (
-    <TableContainer sx={customScrollbarSx}>
+    <TableContainer>
       {transactions.isFetching && <LinearLoader />}
       <Table
         stickyHeader
