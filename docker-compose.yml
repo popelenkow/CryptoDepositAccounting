@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  tokemetric:
+    container_name: tokemetric-container
+    image: tokemetric
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    volumes:
+      - database:/backend/database
+
+volumes:
+  database:
+    driver: local

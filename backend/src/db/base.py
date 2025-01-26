@@ -1,5 +1,6 @@
 import sqlite3
 from functools import wraps
+from pathlib import Path
 from sqlite3 import Cursor
 from typing import Any, Callable, TypeVar
 
@@ -23,6 +24,7 @@ T = TypeVar("T", bound=Callable[..., Any])
 def withDbTransaction(func: T) -> T:
     @wraps(func)
     def wrapper(*args, **kwargs):
+        Path(databasePath).parent.mkdir(parents=True, exist_ok=True)
         connection = sqlite3.connect(databasePath)
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()

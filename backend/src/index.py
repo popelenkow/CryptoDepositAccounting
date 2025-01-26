@@ -1,9 +1,12 @@
 import asyncio
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from api.index import includeRouters
+from common.path import frontendPath
 from db.base import initDb
 from worker.btc import syncBtcWorker
 from worker.instrumentInfo import syncInstrumentInfos
@@ -29,3 +32,8 @@ app.add_middleware(
 )
 
 includeRouters(app)
+
+if os.path.exists(frontendPath):
+    app.mount("/", StaticFiles(directory=frontendPath, html=True), name="frontend")
+else:
+    print("Run without frontend files")
