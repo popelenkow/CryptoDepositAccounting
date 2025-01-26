@@ -8,7 +8,7 @@ export const AppTabTitle: FC = () => {
   useEffect(() => {
     const originalTitle = document.title;
 
-    document.title = `${info.data?.btcPrice ?? 0} BTC BitTradeWorkshop`;
+    document.title = `${info.data?.btcPrice ?? 0} BTC Tokemetric`;
     return () => {
       document.title = originalTitle;
     };
