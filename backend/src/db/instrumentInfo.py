@@ -5,17 +5,19 @@ from typing import List
 from db.base import dbTables, withDbTransaction
 from db.models.instrumentInfo import InstrumentInfo, InstrumentInfoData
 
+
 @withDbTransaction
 def getInstrumentInfos(*, cursor: Cursor) -> List[InstrumentInfo]:
     cursor.execute(f"SELECT id, data FROM {dbTables.instrumentInfo}")
     rows = cursor.fetchall()
 
     result: List[InstrumentInfo] = [
-        InstrumentInfo.model_validate({ **json.loads(row["data"]), "id": row["id"] })
+        InstrumentInfo.model_validate({**json.loads(row["data"]), "id": row["id"]})
         for row in rows
     ]
     return result
-  
+
+
 @withDbTransaction
 def importInstrumentInfos(
     infos: List[InstrumentInfoData], *, cursor: Cursor

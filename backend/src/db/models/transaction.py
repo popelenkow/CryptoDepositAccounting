@@ -1,6 +1,7 @@
 from typing import List, Literal, Optional, Union
 
 from pydantic import RootModel
+
 from db.models.base import BaseModelWithUndefined
 
 
@@ -53,7 +54,7 @@ TransactionDataUnion = Union[
 ]
 
 
-class TransactionData(RootModel[TransactionDataUnion]):    
+class TransactionData(RootModel[TransactionDataUnion]):
     def __getattr__(self, name):
         if hasattr(self.root, name):
             return getattr(self.root, name)

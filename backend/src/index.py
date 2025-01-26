@@ -6,8 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.index import includeRouters
 from db.base import initDb
 from worker.btc import syncBtcWorker
-from worker.price import subscribePrices
 from worker.instrumentInfo import syncInstrumentInfos
+from worker.price import subscribePrices
 
 
 async def lifespan(app: FastAPI):
