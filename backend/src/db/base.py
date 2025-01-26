@@ -1,12 +1,9 @@
-import os
 import sqlite3
 from functools import wraps
 from sqlite3 import Cursor
 from typing import Any, Callable, TypeVar
 
-databasePath = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "../../database.db"
-)
+from common.path import databasePath
 
 
 class DbTables:

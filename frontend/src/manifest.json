@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Bit Trade Workshop",
+  "name": "Tokemetric",
   "version": "1.0",
   "permissions": ["tabs", "activeTab"],
   "host_permissions": ["https://*/*", "http://*/*"],

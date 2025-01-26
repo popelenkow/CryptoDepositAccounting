@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Request
 
+from common.dual.offer import parseDualOffersHtml
+from common.time import getCurrentDualStartTime, getCurrentTime
 from db.info import getInfo, updateInfo
 from db.models.info import DualOffer, DualOffersInfo, Info
-from utils.dual.offer import parseDualOffersHtml
-from utils.time import getCurrentDualStartTime, getCurrentTime
 
 infoRouter = APIRouter(prefix="/api/info")
 
