@@ -11,7 +11,7 @@ pip install -r requirements.txt
 
 Run dev
 ```bash
-fastapi dev src/index.py
+fastapi dev src/index.py --host 0.0.0.0 --port 3001
 ```
 
 Autoformat code

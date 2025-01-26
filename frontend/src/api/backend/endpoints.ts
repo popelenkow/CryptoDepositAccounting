@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+import { assertDefined } from '../../common/assert';
 import { mutationOptions, queryClient } from '../queryClient';
 import { createRequest } from '../request';
 import {
@@ -9,7 +10,17 @@ import {
   TransactionData,
 } from './types';
 
-export const request = createRequest('http://127.0.0.1:8000/');
+const getBaseUrl = (): string => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  if (mode === 'extensionPopup' || mode === 'extensionPage') {
+    return 'http://localhost:3001/';
+  }
+  return window.location.origin;
+};
+const baseUrl = getBaseUrl();
+  
+export const request = createRequest(baseUrl);
 
 export const getInfoOptions = queryOptions({
   queryKey: ['info'],
@@ -46,6 +57,7 @@ export const getTransactionsOptions = queryOptions({
       method: 'get',
       endpoint: '/api/transaction/list',
     }),
+  refetchOnMount: false,
 });
 
 export const addTransactionOptions = mutationOptions({

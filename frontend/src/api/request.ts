@@ -30,7 +30,7 @@ export const createRequest = (
     };
     const body = formBody ?? textBody ?? JSON.stringify(jsonBody);
 
-    const url = new URL(endpoint, apiBaseUrl);
+    const url = apiBaseUrl ? new URL(endpoint, apiBaseUrl) : endpoint;
     const response = await fetch(url, {
       method,
       headers: getHeaders(),
