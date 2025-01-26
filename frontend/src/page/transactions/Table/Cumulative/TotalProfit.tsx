@@ -9,7 +9,7 @@ import { getGridsTrades } from '../../../../common/grid/trade';
 import { useGridOptionsStore } from '../../Options/store';
 import { useGridList } from '../../useGridList';
 
-export const GridsHeadAllTotalProfit: FC = () => {
+export const GridsCumulativeTotalProfit: FC = () => {
   const mode = useGridOptionsStore((state) => state.mode);
   const list = useGridList();
 
@@ -29,26 +29,38 @@ export const GridsHeadAllTotalProfit: FC = () => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Total:</Typography>
-        <Typography color={getProfitPercentColor(total / divisorToPercent)}>
+        <Typography variant='body2'>Total:</Typography>
+        <Typography
+          variant='body2'
+          color={getProfitPercentColor(total / divisorToPercent)}
+        >
           {(total / divisor).toFixed(2)} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Spot:</Typography>
-        <Typography color={getProfitPercentColor(spot / divisorToPercent)}>
+        <Typography variant='body2'>Spot:</Typography>
+        <Typography
+          variant='body2'
+          color={getProfitPercentColor(spot / divisorToPercent)}
+        >
           {(spot / divisor).toFixed(2)} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Funding:</Typography>
-        <Typography color={getProfitPercentColor(funding / divisorToPercent)}>
+        <Typography variant='body2'>Funding:</Typography>
+        <Typography
+          variant='body2'
+          color={getProfitPercentColor(funding / divisorToPercent)}
+        >
           {(funding / divisor).toFixed(2)} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Grid:</Typography>
-        <Typography color={getProfitPercentColor(grid / divisorToPercent)}>
+        <Typography variant='body2'>Grid:</Typography>
+        <Typography
+          variant='body2'
+          color={getProfitPercentColor(grid / divisorToPercent)}
+        >
           {(grid / divisor).toFixed(2)} {symbol}
         </Typography>
       </Stack>

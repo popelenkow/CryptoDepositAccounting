@@ -8,6 +8,7 @@ import { IncomeMode, IncomePrediction } from '../../../common/grid/trade';
 import { IncomePeriod } from '../../../common/period';
 
 export type GridOptionsState = {
+  open: boolean;
   status: GridTransactionStatus;
   instruments: string[];
   selectType: GridTransactionSelectType;
@@ -17,6 +18,7 @@ export type GridOptionsState = {
   sort: GridTransactionSort;
 };
 const defaultState: GridOptionsState = {
+  open: false,
   status: 'actual',
   instruments: [],
   selectType: 'all',
@@ -25,7 +27,12 @@ const defaultState: GridOptionsState = {
   period: 'daily',
   sort: {
     order: 'desc',
-    type: 'gridPeriodPercent',
+    by: {
+      category: 'profit',
+      type: 'total',
+      mode: 'percent',
+      period: 'lifetime',
+    },
   },
 };
 

@@ -21,7 +21,6 @@ export const GridsBodyPrice: FC<GridsBodyPriceProps> = (props) => {
   const currency = currencySymbols[mode];
 
   const rangePercent = `${getExcessRatioPercent(maxPrice, minPrice).toFixed(2)} ${currencySymbols.percent}`;
-  const range = `${minPrice} ${currencySymbols.usdt} - ${maxPrice} ${currencySymbols.usdt}`;
 
   const startRatioPercent = getRatioPercent(startPrice, maxPrice, minPrice);
   const start = mode === 'usdt' ? startPrice : startRatioPercent.toFixed(2);
@@ -36,33 +35,43 @@ export const GridsBodyPrice: FC<GridsBodyPriceProps> = (props) => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Range:</Typography>
-        <Typography>{range}</Typography>
+        <Typography variant='body2'>Max:</Typography>
+        <Typography variant='body2'>{`${maxPrice} ${currencySymbols.usdt}`}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Excess ratio:</Typography>
-        <Typography>{rangePercent}</Typography>
+        <Typography variant='body2'>Min:</Typography>
+        <Typography variant='body2'>{`${minPrice} ${currencySymbols.usdt}`}</Typography>
       </Stack>
-      <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Start:</Typography>
-        <Typography>{`${start} ${currency}`}</Typography>
-      </Stack>
-      {transaction.close !== 'pending' && (
-        <Stack direction='row' justifyContent='end' gap={1}>
-          <Typography>End:</Typography>
-          <Typography
-            color={getRangeRatioColor(endRatioPercent, startRatioPercent)}
-          >{`${end} ${currency}`}</Typography>
-        </Stack>
-      )}
       {transaction.close === 'pending' && (
         <Stack direction='row' justifyContent='end' gap={1}>
-          <Typography>Current:</Typography>
+          <Typography variant='body2'>Current:</Typography>
           <Typography
+            variant='body2'
             color={getRangeRatioColor(currentRatioPercent, startRatioPercent)}
-          >{`${current} ${currency}`}</Typography>
+          >
+            {`${current} ${currency}`}
+          </Typography>
         </Stack>
       )}
+      {transaction.close !== 'pending' && (
+        <Stack direction='row' justifyContent='end' gap={1}>
+          <Typography variant='body2'>End:</Typography>
+          <Typography
+            variant='body2'
+            color={getRangeRatioColor(endRatioPercent, startRatioPercent)}
+          >
+            {`${end} ${currency}`}
+            </Typography>
+        </Stack>
+      )}
+      <Stack direction='row' justifyContent='end' gap={1}>
+        <Typography variant='body2'>Start:</Typography>
+        <Typography variant='body2'>{`${start} ${currency}`}</Typography>
+      </Stack>
+      <Stack direction='row' justifyContent='end' gap={1}>
+        <Typography variant='body2'>Excess ratio:</Typography>
+        <Typography variant='body2'>{rangePercent}</Typography>
+      </Stack>
     </TableCell>
   );
 };

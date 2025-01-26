@@ -17,10 +17,14 @@ export type FutureGrid = {
   account_type: 'BOT_ACCOUNT_TYPE_FUND';
   close_detail: {
     settlement_asset: string;
-    close_reason: 'STOP_TYPE_USER' | 'STOP_TYPE_TP';
+    close_reason:
+      | 'STOP_TYPE_USER'
+      | 'STOP_TYPE_TP'
+      | 'STOP_TYPE_TRIGGER_FBU_FAIL';
     bot_close_code:
       | 'BOT_CLOSE_CODE_CANCELED_MANUALLY'
-      | 'BOT_CLOSE_CODE_CANCELED_AUTO_TP';
+      | 'BOT_CLOSE_CODE_CANCELED_AUTO_TP'
+      | 'BOT_CLOSE_CODE_FAILED_INITIATION';
   } | null;
   arbitrage_num: number;
   total_apr: string;

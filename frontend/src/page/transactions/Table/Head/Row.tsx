@@ -9,9 +9,8 @@ export const GridsHeadRow: FC = () => {
   return (
     <TableRow>
       <TableCell align='right' width='1%'>
-        Id
+        Instrument
       </TableCell>
-      <TableCell align='right'>Instrument</TableCell>
       <TableCell align='right'>Deposit</TableCell>
       <TableCell align='right'>Price</TableCell>
       <TableCell align='right'>Time</TableCell>

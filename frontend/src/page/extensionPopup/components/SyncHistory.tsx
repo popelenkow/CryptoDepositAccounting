@@ -25,9 +25,13 @@ export const SyncHistory: FC = () => {
       endIcon={<SyncIcon />}
       onClick={async () => {
         const response = await getHistoryGrids.mutateAsync();
-        const bots = response.result.bots.map((bot) =>
-          createTransaction(bot.future_grid, list),
-        );
+        const bots = response.result.bots
+          .filter(
+            (bot) =>
+              bot.future_grid.close_detail?.bot_close_code !==
+              'BOT_CLOSE_CODE_FAILED_INITIATION',
+          )
+          .map((bot) => createTransaction(bot.future_grid, list));
         bots.reverse();
         importTransactions.mutate(bots);
       }}

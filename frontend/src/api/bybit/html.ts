@@ -36,8 +36,10 @@ export const findByInnerTextXPath = (text: string) => {
     XPathResult.FIRST_ORDERED_NODE_TYPE,
     null,
   );
+
+  const node = assertDefined(result.singleNodeValue, `Node not found: ${text}`);
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return assertDefined(result.singleNodeValue) as HTMLElement;
+  return node as HTMLElement;
 };
 
 export const findElement = <
@@ -51,10 +53,14 @@ export const findElement = <
   const containerNodeList =
     document.querySelectorAll<Container>(containerSelector);
   const containers = Array.from(containerNodeList);
-  const container = assertDefined(containers.find(check ?? (() => true)));
+  const container = assertDefined(
+    containers.find(check ?? (() => true)),
+    'Container not found',
+  );
   const element = assertDefined(
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     select ? select(container) : (container as unknown as Result),
+    'Element not found',
   );
   return element;
 };

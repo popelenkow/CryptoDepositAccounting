@@ -89,6 +89,7 @@ export const appTheme = createTheme({
         root: {
           padding: '8px',
         },
+        head: (props) => props.theme.typography.subtitle1,
       },
     },
   },

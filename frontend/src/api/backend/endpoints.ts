@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { assertDefined } from '../../common/assert';
+import { getAppMode } from '../../common/appMode';
 import { mutationOptions, queryClient } from '../queryClient';
 import { createRequest } from '../request';
 import {
@@ -11,15 +11,14 @@ import {
 } from './types';
 
 const getBaseUrl = (): string => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
-  if (mode === 'extensionPopup' || mode === 'extensionPage') {
+  const appMode = getAppMode();
+  if (appMode === 'extensionPopup' || appMode === 'extensionPage') {
     return 'http://localhost:3001/';
   }
   return window.location.origin;
 };
 const baseUrl = getBaseUrl();
-  
+
 export const request = createRequest(baseUrl);
 
 export const getInfoOptions = queryOptions({

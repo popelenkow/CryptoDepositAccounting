@@ -32,20 +32,20 @@ export const GridsBodyPeriodProfit: FC<GridsBodyPeriodProfitProps> = (
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Total:</Typography>
-        <Typography>{toPreview(total)}</Typography>
+        <Typography variant='body2'>Total:</Typography>
+        <Typography variant='body2'>{toPreview(total)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Spot:</Typography>
-        <Typography>{toPreview(spot)}</Typography>
+        <Typography variant='body2'>Spot:</Typography>
+        <Typography variant='body2'>{toPreview(spot)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Funding:</Typography>
-        <Typography>{toPreview(funding)}</Typography>
+        <Typography variant='body2'>Funding:</Typography>
+        <Typography variant='body2'>{toPreview(funding)}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Grid:</Typography>
-        <Typography>{toPreview(grid)}</Typography>
+        <Typography variant='body2'>Grid:</Typography>
+        <Typography variant='body2'>{toPreview(grid)}</Typography>
       </Stack>
     </TableCell>
   );

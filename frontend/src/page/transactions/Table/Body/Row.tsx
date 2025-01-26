@@ -1,7 +1,8 @@
-import { TableCell, TableRow } from '@mui/material';
+import { TableRow } from '@mui/material';
 import { memo } from 'react';
 import { Transaction } from '../../../../api/backend/types';
 import { GridsBodyDeposit } from './Deposit';
+import { GridsBodyInstrument } from './Instrument';
 import { GridsBodyPeriodProfit } from './PeriodProfit';
 import { GridsBodyPrice } from './Price';
 import { GridsBodyTime } from './Time';
@@ -16,8 +17,7 @@ const GridsBodyRow = (props: GridsBodyRowProps) => {
 
   return (
     <TableRow key={id}>
-      <TableCell align='right'>{id}</TableCell>
-      <TableCell align='right'>{data.instrument}</TableCell>
+      <GridsBodyInstrument id={id} transaction={data} />
       <GridsBodyDeposit transaction={data} />
       <GridsBodyPrice transaction={data} />
       <GridsBodyTime transaction={data} />

@@ -30,7 +30,11 @@ export type FutureGridDetail = {
   position_balance: string;
   available_balance: string;
   total_order_balance: string;
-  close_reason: 'STOP_TYPE_USER' | 'STOP_TYPE_TP' | 'STOP_TYPE_UNSPECIFIED';
+  close_reason:
+    | 'STOP_TYPE_USER'
+    | 'STOP_TYPE_TP'
+    | 'STOP_TYPE_UNSPECIFIED'
+    | 'STOP_TYPE_TRIGGER_FBU_FAIL';
   allow_follow: number;
   operation_time: string;
   create_time: string;

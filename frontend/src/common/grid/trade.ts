@@ -24,7 +24,7 @@ export const getGridTradeQuantity = (
   const quantity = (amount * leverage) / totalPrices;
   const decimals = -Math.log10(instrumentInfo.quantityStep);
   // ToDo: There is no exact explanation why this is so, it’s just that the Bybit allocates slightly less money.
-  const bybitCorrection = 0.95;
+  const bybitCorrection = 0.955;
   return floorTo(quantity * bybitCorrection, decimals);
 };
 

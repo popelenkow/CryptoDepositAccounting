@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { currencySymbols } from '../../../../common/currency';
 import { useGridList } from '../../useGridList';
 
-export const GridsHeadAllDeposit: FC = () => {
+export const GridsCumulativeDeposit: FC = () => {
   const list = useGridList();
 
   const deposit = list.reduce((acc, x) => acc + x.data.amount, 0);
@@ -13,14 +13,14 @@ export const GridsHeadAllDeposit: FC = () => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Amount:</Typography>
-        <Typography>
+        <Typography variant='body2'>Amount:</Typography>
+        <Typography variant='body2'>
           {deposit.toFixed(2)} {currencySymbols.usdt}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Leverage:</Typography>
-        <Typography>{leverage.toFixed(2)}</Typography>
+        <Typography variant='body2'>Leverage:</Typography>
+        <Typography variant='body2'>{leverage.toFixed(2)}</Typography>
       </Stack>
     </TableCell>
   );

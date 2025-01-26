@@ -6,7 +6,7 @@ export const createBybitRequest = <Key extends keyof BybitApi>(
   key: Key,
 ): BybitApi[Key] => {
   const method = async (arg: BybitApiArg<Key>) => {
-    const tabId = assertDefined(rawTabId);
+    const tabId = assertDefined(rawTabId, 'TabId not defined');
 
     const message: BybitApiMessage<Key> = { key, arg };
     type Message = BybitApiMessage<Key>;

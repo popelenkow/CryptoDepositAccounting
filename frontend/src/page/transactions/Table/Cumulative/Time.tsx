@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getGridsDuration } from '../../../../common/grid/time';
 import { useGridList } from '../../useGridList';
 
-export const GridsHeadAllTime: FC = () => {
+export const GridsCumulativeTime: FC = () => {
   const list = useGridList();
 
   const transactions = list.map((x) => x.data);
@@ -13,8 +13,8 @@ export const GridsHeadAllTime: FC = () => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Duration:</Typography>
-        <Typography>{`${duration.toFixed(2)} days`}</Typography>
+        <Typography variant='body2'>Duration:</Typography>
+        <Typography variant='body2'>{`${duration.toFixed(2)} days`}</Typography>
       </Stack>
     </TableCell>
   );

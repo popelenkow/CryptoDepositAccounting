@@ -6,19 +6,24 @@ import {
   Radio,
 } from '@mui/material';
 import { FC, useRef, useState } from 'react';
-import { IncomeMode } from '../../../../common/grid/trade';
-import { useGridOptionsStore } from '../store';
+import { GridTransactionSortByProfit } from '../../../../../api/backend/select/grid';
+import { useGridOptionsStore } from '../../store';
 
-const modes: Record<IncomeMode, string> = {
-  usdt: 'USDT',
+const modes: Record<GridTransactionSortByProfit['mode'], string> = {
   percent: 'Percent',
+  usdt: 'USDT',
 };
 
-export const TransactionsPageOptionsMode: FC = () => {
-  const mode = useGridOptionsStore((state) => state.mode);
+export const TransactionsPageOptionsSortByMode: FC = () => {
+  const by = useGridOptionsStore((state) => state.sort.by);
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const selectedText = modes[mode];
+
+  if (by.category !== 'profit') {
+    return null;
+  }
+
+  const selectedText = modes[by.mode];
 
   return (
     <>
@@ -40,16 +45,24 @@ export const TransactionsPageOptionsMode: FC = () => {
         {Object.entries(modes).map(([key, text]) => (
           <MenuItem
             key={key}
-            selected={key === mode}
+            selected={key === status}
             onClick={() => {
               // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const mode = key as IncomeMode;
-              useGridOptionsStore.setState({ mode });
+              const mode = key as GridTransactionSortByProfit['mode'];
+              useGridOptionsStore.setState((state) => ({
+                ...state,
+                sort: {
+                  ...state.sort,
+                  by: {
+                    ...by,
+                    mode,
+                  },
+                },
+              }));
               setOpen(false);
             }}
-            dense
           >
-            <Radio size='small' checked={key === mode} />
+            <Radio checked={key === by.mode} />
             <ListItemText primary={text} />
           </MenuItem>
         ))}

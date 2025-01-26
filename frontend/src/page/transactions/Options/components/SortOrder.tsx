@@ -6,19 +6,24 @@ import {
   Radio,
 } from '@mui/material';
 import { FC, useRef, useState } from 'react';
-import { IncomePeriod, periodNames } from '../../../../common/period';
+import { GridTransactionSortOrder } from '../../../../api/backend/select/grid';
 import { useGridOptionsStore } from '../store';
 
-export const TransactionsPageOptionsPeriod: FC = () => {
-  const period = useGridOptionsStore((state) => state.period);
+const sortOrders: Record<GridTransactionSortOrder, string> = {
+  asc: 'Asc',
+  desc: 'Desc',
+};
+
+export const TransactionsPageOptionsSortOrder: FC = () => {
+  const order = useGridOptionsStore((state) => state.sort.order);
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const selectedText = periodNames[period];
+  const selectedText = sortOrders[order];
 
   return (
     <>
       <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Period' secondary={selectedText} />
+        <ListItemText primary='Order' secondary={selectedText} />
       </ListItemButton>
       <Menu
         anchorEl={ref.current}
@@ -32,18 +37,21 @@ export const TransactionsPageOptionsPeriod: FC = () => {
           },
         }}
       >
-        {Object.entries(periodNames).map(([key, text]) => (
+        {Object.entries(sortOrders).map(([key, text]) => (
           <MenuItem
             key={key}
-            selected={key === period}
+            selected={key === order}
             onClick={() => {
               // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const period = key as IncomePeriod;
-              useGridOptionsStore.setState({ period });
+              const order = key as GridTransactionSortOrder;
+              useGridOptionsStore.setState((state) => ({
+                ...state,
+                sort: { ...state.sort, order },
+              }));
               setOpen(false);
             }}
           >
-            <Radio checked={key === period} />
+            <Radio checked={key === order} />
             <ListItemText primary={text} />
           </MenuItem>
         ))}

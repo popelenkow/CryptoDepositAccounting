@@ -6,7 +6,7 @@ import {
 
 const sort: GridTransactionSort = {
   order: 'desc',
-  type: 'id',
+  by: { category: 'other', type: 'id' },
 };
 export const useGridList = () => {
   const transactions = useQuery(getGridTransactionsOptions({ sort }));

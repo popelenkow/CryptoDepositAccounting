@@ -49,7 +49,7 @@ const toTransactionInfo = (
 
   const detail: GridTransactionInfo = {
     startPrice: Number(rawDetail.entry_price),
-    endPrice: Number(rawDetail.real_close_price),
+    endPrice: Number(rawDetail.real_close_price || rawDetail.take_profit_price),
     startTime: new Date(Number(rawDetail.create_time)).toISOString(),
     endTime: new Date(Number(rawDetail.end_time)).toISOString(),
     funding: -Number(rawDetail.funding_fee),

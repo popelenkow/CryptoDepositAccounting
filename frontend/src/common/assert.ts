@@ -1,9 +1,18 @@
-export const assertDefined = <T>(
+export const assertDefined = <T>(value: T, message: string): NonNullable<T> => {
+  if (value === undefined || value === null) {
+    throw new Error(message);
+  }
+  return value;
+};
+
+export const warnDefined = <T>(
   value: T,
-  message: string = 'Value must be defined',
+  defaultValue: NonNullable<T>,
+  message: string,
 ): NonNullable<T> => {
   if (value === undefined || value === null) {
-    throw new Error(`${message}. Received: ${JSON.stringify(value)}`);
+    console.warn(message);
+    return defaultValue;
   }
   return value;
 };

@@ -25,6 +25,7 @@ export const fillGridParameters = async (
 ) => {
   assertDefined(
     document.querySelector<HTMLElement>('.oc-head-leverage'),
+    'Leverage not found',
   ).click();
   await wait(100);
 
@@ -62,6 +63,7 @@ export const fillGridParameters = async (
     document.querySelector<HTMLInputElement>(
       '[placeholder="Lower price range"]',
     ),
+    'Lower price range not found',
   );
   setInputValue(fromInput, parameters.from);
 
@@ -69,6 +71,7 @@ export const fillGridParameters = async (
     document.querySelector<HTMLInputElement>(
       '[placeholder="Upper price range"]',
     ),
+    'Upper price range not found',
   );
   setInputValue(toInput, parameters.to);
 
@@ -76,6 +79,7 @@ export const fillGridParameters = async (
   await wait(100);
   const geometric = assertDefined(
     document.querySelector<HTMLElement>('[title="Geometric"]'),
+    'Geometric not found',
   );
   geometric.click();
 
@@ -85,12 +89,17 @@ export const fillGridParameters = async (
   if (!takeProfitRoot) {
     assertDefined(
       document.querySelector<HTMLElement>('.oc__tp-sl-chk-text'),
+      'Checkbox details not found',
     ).click();
     await wait(100);
     takeProfitRoot = assertDefined(
       document.querySelector<HTMLElement>('.grid-take-profit-loss-input'),
+      'Take profit root not found',
     );
   }
-  const takeProfitInput = assertDefined(takeProfitRoot.querySelector('input'));
+  const takeProfitInput = assertDefined(
+    takeProfitRoot.querySelector('input'),
+    'Take profit input not found',
+  );
   setInputValue(takeProfitInput, roundTo(parameters.to + 0.0001, 4));
 };

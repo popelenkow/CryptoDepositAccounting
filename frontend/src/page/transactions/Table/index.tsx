@@ -4,8 +4,8 @@ import { FC } from 'react';
 import { getGridTransactionsOptions } from '../../../api/backend/select/grid';
 import { LinearLoader } from '../../../components/LinearLoader';
 import { GridsBody } from './Body';
+import { GridsCumulativeRow } from './Cumulative/Row';
 import { GridsHeadRow } from './Head/Row';
-import { GridsHeadAllRow } from './HeadAll/Row';
 
 export const TransactionsPageTable: FC = () => {
   const transactions = useQuery(getGridTransactionsOptions());
@@ -32,7 +32,7 @@ export const TransactionsPageTable: FC = () => {
           }}
         >
           <GridsHeadRow />
-          <GridsHeadAllRow />
+          <GridsCumulativeRow />
         </TableHead>
         <GridsBody />
       </Table>

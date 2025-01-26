@@ -33,26 +33,29 @@ export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Total:</Typography>
-        <Typography color={getProfitPercentColor(totalPercent)}>
+        <Typography variant='body2'>Total:</Typography>
+        <Typography variant='body2' color={getProfitPercentColor(totalPercent)}>
           {total} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Spot:</Typography>
-        <Typography color={getProfitPercentColor(spotPercent)}>
+        <Typography variant='body2'>Spot:</Typography>
+        <Typography variant='body2' color={getProfitPercentColor(spotPercent)}>
           {spot} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Funding:</Typography>
-        <Typography color={getProfitPercentColor(fundingPercent)}>
+        <Typography variant='body2'>Funding:</Typography>
+        <Typography
+          variant='body2'
+          color={getProfitPercentColor(fundingPercent)}
+        >
           {funding} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography>Grid:</Typography>
-        <Typography color={getProfitPercentColor(gridPercent)}>
+        <Typography variant='body2'>Grid:</Typography>
+        <Typography variant='body2' color={getProfitPercentColor(gridPercent)}>
           {grid} {symbol}
         </Typography>
       </Stack>
