@@ -1,6 +1,6 @@
 ﻿aiosqlite==0.17.0
-black==24.8.0
 beautifulsoup4==4.12.3
-isort==5.13.2
-fastapi[standard]==0.115.0
-pybit==5.8.0
+black==25.1.0
+isort==6.0.0
+fastapi[standard]==0.115.7
+pybit==5.9.0
