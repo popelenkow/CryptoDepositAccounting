@@ -2,6 +2,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import { getGridsOptions } from '../../../api/bybit/endpoints';
 import { createTransaction } from '../common/map';
@@ -9,6 +10,7 @@ import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncActual: FC = () => {
+  const { t } = useTranslation();
   const tabId = useActiveTabId();
   const list = useGridList();
 
@@ -32,7 +34,7 @@ export const SyncActual: FC = () => {
         importTransactions.mutate(bots);
       }}
     >
-      Sync actual
+      {t('page.extensionPopup.syncActual')}
     </LoadingButton>
   );
 };

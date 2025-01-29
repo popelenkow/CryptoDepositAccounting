@@ -2,6 +2,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import { getGridDetailOptions } from '../../../api/bybit/endpoints';
 import { mapSecondsToDays } from '../../../common/time';
@@ -10,6 +11,7 @@ import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncDetail: FC = () => {
+  const { t } = useTranslation();
   const tabId = useActiveTabId();
   const list = useGridList();
 
@@ -35,14 +37,16 @@ export const SyncDetail: FC = () => {
 
   const getText = () => {
     if (outdatedTransactions.length > 0) {
-      return `${outdatedTransactions.length} outdated`;
+      const value = outdatedTransactions.length;
+      return t('page.extensionPopup.syncDetailOutdated', { value });
     }
     if (sortedTransactions.length > 0) {
       const today = new Date().getTime();
       const lastUpdate = new Date(
         sortedTransactions[0].data.lastUpdate,
       ).getTime();
-      return `${mapSecondsToDays((today - lastUpdate) / 1000).toFixed(2)} days`;
+      const value = mapSecondsToDays((today - lastUpdate) / 1000).toFixed(2);
+      return t('page.extensionPopup.syncDetailDays', { value });
     }
     return '';
   };
@@ -76,7 +80,7 @@ export const SyncDetail: FC = () => {
         importTransactions.mutate(newTransactions);
       }}
     >
-      {`Sync detail (${getText()})`}
+      {t('page.extensionPopup.syncDetail', { text: getText() })}
     </LoadingButton>
   );
 };

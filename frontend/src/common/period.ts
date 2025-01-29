@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import { assertNever } from './assert';
 
 export type IncomePeriod = 'daily' | 'weekly' | 'monthly' | 'yearly';
@@ -18,9 +19,9 @@ export const toPeriodValue = (daily: number, period: IncomePeriod) => {
   return assertNever(period);
 };
 
-export const periodNames: Record<IncomePeriod, string> = {
-  daily: 'Daily',
-  weekly: 'Weekly',
-  monthly: 'Monthly',
-  yearly: 'Yearly',
+export const periodNames: Record<IncomePeriod, (t: TFunction) => string> = {
+  daily: (t) => t('common.period.daily'),
+  weekly: (t) => t('common.period.weekly'),
+  monthly: (t) => t('common.period.monthly'),
+  yearly: (t) => t('common.period.yearly'),
 };

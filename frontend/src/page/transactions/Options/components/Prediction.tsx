@@ -1,58 +1,33 @@
-import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IncomePrediction } from '../../../../common/grid/trade';
+import { Item } from '../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../store';
 
-const predictions: Record<IncomePrediction, string> = {
-  optimistic: 'Optimistic',
-  pessimistic: 'Pessimistic',
-};
+const items: Item<IncomePrediction>[] = [
+  {
+    key: 'optimistic',
+    text: (t) => t('page.transactions.options.prediction.value.optimistic'),
+  },
+  {
+    key: 'pessimistic',
+    text: (t) => t('page.transactions.options.prediction.value.pessimistic'),
+  },
+];
 
 export const TransactionsPageOptionsPrediction: FC = () => {
+  const { t } = useTranslation();
   const prediction = useGridOptionsStore((state) => state.prediction);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const selectedText = predictions[prediction];
 
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Prediction' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
-          },
-        }}
-      >
-        {Object.entries(predictions).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === prediction}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const prediction = key as IncomePrediction;
-              useGridOptionsStore.setState({ prediction });
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === prediction} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+    <ListItemSelect
+      label={t('page.transactions.options.prediction.label')}
+      items={items}
+      selected={prediction}
+      onSelect={(prediction) => {
+        useGridOptionsStore.setState({ prediction });
+      }}
+    />
   );
 };

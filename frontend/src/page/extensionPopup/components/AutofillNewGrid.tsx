@@ -2,6 +2,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   fillGridParametersOptions,
   getGridCurrentPriceOptions,
@@ -10,6 +11,7 @@ import { roundTo } from '../../../common/value';
 import { useActiveTabId } from '../common/useActiveTab';
 
 export const AutofillNewGrid: FC = () => {
+  const { t } = useTranslation();
   const tabId = useActiveTabId();
 
   const getGridCurrentPrice = useMutation(getGridCurrentPriceOptions(tabId));
@@ -33,7 +35,7 @@ export const AutofillNewGrid: FC = () => {
         });
       }}
     >
-      Autofill new grid
+      {t('page.extensionPopup.autofillNewGrid')}
     </LoadingButton>
   );
 };

@@ -1,96 +1,83 @@
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
-import {
-  GridTransactionSortBy,
   GridTransactionSortByOther,
   GridTransactionSortByProfit,
   GridTransactionSortByTime,
 } from '../../../../../api/backend/select/grid';
-import { assertNever } from '../../../../../common/assert';
+import { Item } from '../../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../../store';
 
-const profitTypes: Record<GridTransactionSortByProfit['type'], string> = {
-  total: 'Total',
-  spot: 'Spot',
-  funding: 'Funding',
-  grid: 'Grid',
-};
+const profitItems: Item<GridTransactionSortByProfit['type']>[] = [
+  {
+    key: 'total',
+    text: (t) => t('page.transactions.options.sortBy.type.value.total'),
+  },
+  {
+    key: 'spot',
+    text: (t) => t('page.transactions.options.sortBy.type.value.spot'),
+  },
+  {
+    key: 'funding',
+    text: (t) => t('page.transactions.options.sortBy.type.value.funding'),
+  },
+  {
+    key: 'grid',
+    text: (t) => t('page.transactions.options.sortBy.type.value.grid'),
+  },
+];
 
-const timeTypes: Record<GridTransactionSortByTime['type'], string> = {
-  duration: 'Duration',
-};
+const timeItems: Item<GridTransactionSortByTime['type']>[] = [
+  {
+    key: 'duration',
+    text: (t) => t('page.transactions.options.sortBy.type.value.duration'),
+  },
+];
 
-const otherTypes: Record<GridTransactionSortByOther['type'], string> = {
-  id: 'Id',
-  instrument: 'Instrument',
-  pricePercent: 'Price Percent',
-};
+const otherItems: Item<GridTransactionSortByOther['type']>[] = [
+  {
+    key: 'id',
+    text: (t) => t('page.transactions.options.sortBy.type.value.id'),
+  },
+  {
+    key: 'instrument',
+    text: (t) => t('page.transactions.options.sortBy.type.value.instrument'),
+  },
+  {
+    key: 'pricePercent',
+    text: (t) => t('page.transactions.options.sortBy.type.value.pricePercent'),
+  },
+];
 
-const getTypes = (category: GridTransactionSortBy['category']) => {
-  if (category === 'profit') return profitTypes;
-  if (category === 'time') return timeTypes;
-  if (category === 'other') return otherTypes;
-  return assertNever(category);
+const itemsDict = {
+  profit: profitItems,
+  time: timeItems,
+  other: otherItems,
 };
 
 export const TransactionsPageOptionsSortByType: FC = () => {
+  const { t } = useTranslation();
   const by = useGridOptionsStore((state) => state.sort.by);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const types = getTypes(by.category);
-  type Type = keyof typeof types;
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const type = by.type as Type;
-  const selectedText = types[type];
 
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Type' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
+    <ListItemSelect
+      label={t('page.transactions.options.sortBy.type.label')}
+      items={itemsDict[by.category]}
+      selected={by.type}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onSelect={(type: any) => {
+        useGridOptionsStore.setState((state) => ({
+          ...state,
+          sort: {
+            ...state.sort,
+            by: {
+              ...by,
+              type,
+            },
           },
-        }}
-      >
-        {Object.entries(types).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === type}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const type = key as Type;
-              useGridOptionsStore.setState((state) => ({
-                ...state,
-                sort: {
-                  ...state.sort,
-                  by: {
-                    ...by,
-                    type,
-                  },
-                },
-              }));
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === by.type} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+        }));
+      }}
+    />
   );
 };

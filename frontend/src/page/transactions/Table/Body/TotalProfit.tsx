@@ -1,5 +1,6 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridTransactionData } from '../../../../api/backend/types';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
@@ -14,6 +15,8 @@ export type GridsBodyTotalProfitProps = {
 };
 export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
   const { transaction } = props;
+
+  const { t } = useTranslation();
 
   const mode = useGridOptionsStore((state) => state.mode);
   const symbol = currencySymbols[mode];
@@ -33,19 +36,25 @@ export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Total:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.total')}
+        </Typography>
         <Typography variant='body2' color={getProfitPercentColor(totalPercent)}>
           {total} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Spot:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.spot')}
+        </Typography>
         <Typography variant='body2' color={getProfitPercentColor(spotPercent)}>
           {spot} {symbol}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Funding:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.funding')}
+        </Typography>
         <Typography
           variant='body2'
           color={getProfitPercentColor(fundingPercent)}
@@ -54,7 +63,9 @@ export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Grid:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.grid')}
+        </Typography>
         <Typography variant='body2' color={getProfitPercentColor(gridPercent)}>
           {grid} {symbol}
         </Typography>

@@ -1,53 +1,41 @@
-import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IncomePeriod, periodNames } from '../../../../common/period';
+import { Item } from '../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../store';
 
+const items: Item<IncomePeriod>[] = [
+  {
+    key: 'daily',
+    text: periodNames.daily,
+  },
+  {
+    key: 'weekly',
+    text: periodNames.weekly,
+  },
+  {
+    key: 'monthly',
+    text: periodNames.monthly,
+  },
+  {
+    key: 'yearly',
+    text: periodNames.yearly,
+  },
+];
+
 export const TransactionsPageOptionsPeriod: FC = () => {
+  const { t } = useTranslation();
   const period = useGridOptionsStore((state) => state.period);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const selectedText = periodNames[period];
 
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Period' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
-          },
-        }}
-      >
-        {Object.entries(periodNames).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === period}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const period = key as IncomePeriod;
-              useGridOptionsStore.setState({ period });
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === period} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+    <ListItemSelect
+      label={t('page.transactions.options.period.label')}
+      items={items}
+      selected={period}
+      onSelect={(period) => {
+        useGridOptionsStore.setState({ period });
+      }}
+    />
   );
 };

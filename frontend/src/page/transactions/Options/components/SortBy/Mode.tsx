@@ -1,72 +1,46 @@
-import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridTransactionSortByProfit } from '../../../../../api/backend/select/grid';
+import { Item } from '../../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../../store';
 
-const modes: Record<GridTransactionSortByProfit['mode'], string> = {
-  percent: 'Percent',
-  usdt: 'USDT',
-};
+const items: Item<GridTransactionSortByProfit['mode']>[] = [
+  {
+    key: 'percent',
+    text: (t) => t('page.transactions.options.sortBy.mode.value.percent'),
+  },
+  {
+    key: 'usdt',
+    text: (t) => t('page.transactions.options.sortBy.mode.value.usdt'),
+  },
+];
 
 export const TransactionsPageOptionsSortByMode: FC = () => {
+  const { t } = useTranslation();
   const by = useGridOptionsStore((state) => state.sort.by);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
 
   if (by.category !== 'profit') {
     return null;
   }
 
-  const selectedText = modes[by.mode];
-
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Mode' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
+    <ListItemSelect
+      label={t('page.transactions.options.sortBy.mode.label')}
+      items={items}
+      selected={by.mode}
+      onSelect={(mode) => {
+        useGridOptionsStore.setState((state) => ({
+          ...state,
+          sort: {
+            ...state.sort,
+            by: {
+              ...by,
+              mode,
+            },
           },
-        }}
-      >
-        {Object.entries(modes).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === status}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const mode = key as GridTransactionSortByProfit['mode'];
-              useGridOptionsStore.setState((state) => ({
-                ...state,
-                sort: {
-                  ...state.sort,
-                  by: {
-                    ...by,
-                    mode,
-                  },
-                },
-              }));
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === by.mode} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+        }));
+      }}
+    />
   );
 };

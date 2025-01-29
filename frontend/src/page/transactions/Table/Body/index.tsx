@@ -1,10 +1,12 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGridOptionsStore } from '../../Options/store';
 import { useGridList } from '../../useGridList';
 import { GridsBodyRow } from './Row';
 
 export const GridsBody: FC = () => {
+  const { t } = useTranslation();
   const sort = useGridOptionsStore((options) => options.sort);
   const transactions = useGridList(sort);
 
@@ -16,7 +18,7 @@ export const GridsBody: FC = () => {
       {!transactions.length && (
         <TableRow>
           <TableCell colSpan={100} align='center'>
-            Empty list
+            {t('page.transactions.table.body.emptyList')}
           </TableCell>
         </TableRow>
       )}

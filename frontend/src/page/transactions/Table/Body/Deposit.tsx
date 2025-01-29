@@ -1,6 +1,7 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getInstrumentInfosOptions } from '../../../../api/backend/endpoints';
 import { GridTransactionData } from '../../../../api/backend/types';
 import { warnDefined } from '../../../../common/assert';
@@ -13,6 +14,7 @@ export type GridsBodyDepositProps = {
 export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
   const { transaction } = props;
 
+  const { t } = useTranslation();
   const instrumentInfos = useQuery(getInstrumentInfosOptions);
 
   if (!instrumentInfos.data) {
@@ -35,21 +37,29 @@ export const GridsBodyDeposit: FC<GridsBodyDepositProps> = (props) => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Amount:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.amount')}
+        </Typography>
         <Typography variant='body2'>
           {`${transaction.amount.toFixed(2)} ${currencySymbols.usdt}`}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Leverage:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.leverage')}
+        </Typography>
         <Typography variant='body2'>x{transaction.leverage}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Grids:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.grids')}
+        </Typography>
         <Typography variant='body2'>{transaction.grids}</Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Quantity:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.quantity')}
+        </Typography>
         <Typography variant='body2'>{quantity}</Typography>
       </Stack>
     </TableCell>

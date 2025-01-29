@@ -2,7 +2,6 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import {
   Collapse,
-  Divider,
   lighten,
   List,
   ListItemButton,
@@ -10,6 +9,7 @@ import {
   Paper,
 } from '@mui/material';
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TransactionsPageOptionsInstruments } from './components/Instruments';
 import { TransactionsPageOptionsMode } from './components/Mode';
 import { TransactionsPageOptionsPeriod } from './components/Period';
@@ -21,6 +21,7 @@ import { TransactionsPageOptionsStatus } from './components/Status';
 import { useGridOptionsStore } from './store';
 
 export const TransactionsPageOptions: FC = () => {
+  const { t } = useTranslation();
   const open = useGridOptionsStore((state) => state.open);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
@@ -33,7 +34,6 @@ export const TransactionsPageOptions: FC = () => {
   return (
     <List
       component={Paper}
-      dense
       elevation={1}
       sx={{
         padding: 0,
@@ -48,21 +48,16 @@ export const TransactionsPageOptions: FC = () => {
             lighten(theme.palette.background.paper, 0.1),
         }}
       >
-        <ListItemText primary='Filter' />
+        <ListItemText primary={t('page.transactions.options.title.filter')} />
         {filterOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Divider />
-      <Collapse in={filterOpen} timeout='auto' unmountOnExit>
-        <List dense component='div' disablePadding>
+      <Collapse in={filterOpen}>
+        <List dense disablePadding>
           <TransactionsPageOptionsStatus />
-          <Divider />
           <TransactionsPageOptionsInstruments />
-          <Divider />
           <TransactionsPageOptionsSelectType />
-          <Divider />
         </List>
       </Collapse>
-
       <ListItemButton
         onClick={() => setSortOpen(!sortOpen)}
         sx={{
@@ -70,19 +65,15 @@ export const TransactionsPageOptions: FC = () => {
             lighten(theme.palette.background.paper, 0.1),
         }}
       >
-        <ListItemText primary='Sort' />
+        <ListItemText primary={t('page.transactions.options.title.sort')} />
         {sortOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Divider />
-      <Collapse in={sortOpen} timeout='auto' unmountOnExit>
-        <List dense component='div' disablePadding>
+      <Collapse in={sortOpen}>
+        <List dense disablePadding>
           <TransactionsPageOptionsSortOrder />
-          <Divider />
           <TransactionsPageOptionsSortBy />
-          <Divider />
         </List>
       </Collapse>
-
       <ListItemButton
         onClick={() => setDisplayOpen(!displayOpen)}
         sx={{
@@ -90,16 +81,13 @@ export const TransactionsPageOptions: FC = () => {
             lighten(theme.palette.background.paper, 0.1),
         }}
       >
-        <ListItemText primary='Display' />
+        <ListItemText primary={t('page.transactions.options.title.display')} />
         {displayOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Divider />
-      <Collapse in={displayOpen} timeout='auto' unmountOnExit>
-        <List dense component='div' disablePadding>
+      <Collapse in={displayOpen}>
+        <List dense disablePadding>
           <TransactionsPageOptionsMode />
-          <Divider />
           <TransactionsPageOptionsPeriod />
-          <Divider />
           <TransactionsPageOptionsPrediction />
         </List>
       </Collapse>

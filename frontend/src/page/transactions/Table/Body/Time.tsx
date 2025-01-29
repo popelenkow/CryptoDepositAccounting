@@ -1,5 +1,6 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridTransactionData } from '../../../../api/backend/types';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridDuration } from '../../../../common/grid/time';
@@ -12,6 +13,8 @@ export type GridsBodyTimeProps = {
 };
 export const GridsBodyTime: FC<GridsBodyTimeProps> = (props) => {
   const { transaction } = props;
+
+  const { t } = useTranslation();
   const mode = useGridOptionsStore((state) => state.mode);
 
   const symbol = currencySymbols[mode];
@@ -21,20 +24,26 @@ export const GridsBodyTime: FC<GridsBodyTimeProps> = (props) => {
   return (
     <TableCell align='right'>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Duration:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.duration')}
+        </Typography>
         <Typography variant='body2'>
           {`${getGridDuration(transaction).toFixed(2)} days`}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>Start:</Typography>
+        <Typography variant='body2'>
+          {t('page.transactions.table.body.start')}
+        </Typography>
         <Typography variant='body2'>
           {toUiDateTime(transaction.startTime)}
         </Typography>
       </Stack>
       {transaction.close !== 'pending' && (
         <Stack direction='row' justifyContent='end' gap={1}>
-          <Typography variant='body2'>End:</Typography>
+          <Typography variant='body2'>
+            {t('page.transactions.table.body.end')}
+          </Typography>
           <Typography variant='body2'>
             {toUiDateTime(transaction.endTime)}
           </Typography>

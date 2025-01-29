@@ -2,6 +2,7 @@ import SyncIcon from '@mui/icons-material/Sync';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import { getHistoryGridsOptions } from '../../../api/bybit/endpoints';
 import { createTransaction } from '../common/map';
@@ -9,6 +10,7 @@ import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncHistory: FC = () => {
+  const { t } = useTranslation();
   const tabId = useActiveTabId();
   const list = useGridList();
 
@@ -36,7 +38,7 @@ export const SyncHistory: FC = () => {
         importTransactions.mutate(bots);
       }}
     >
-      Sync history
+      {t('page.extensionPopup.syncHistory')}
     </LoadingButton>
   );
 };

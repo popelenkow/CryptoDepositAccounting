@@ -1,72 +1,46 @@
-import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridTransactionSortByProfit } from '../../../../../api/backend/select/grid';
+import { Item } from '../../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../../store';
 
-const periods: Record<GridTransactionSortByProfit['period'], string> = {
-  lifetime: 'Lifetime',
-  daily: 'Daily',
-};
+const items: Item<GridTransactionSortByProfit['period']>[] = [
+  {
+    key: 'lifetime',
+    text: (t) => t('page.transactions.options.sortBy.period.value.lifetime'),
+  },
+  {
+    key: 'daily',
+    text: (t) => t('page.transactions.options.sortBy.period.value.daily'),
+  },
+];
 
 export const TransactionsPageOptionsSortByPeriod: FC = () => {
+  const { t } = useTranslation();
   const by = useGridOptionsStore((state) => state.sort.by);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
 
   if (by.category !== 'profit') {
     return null;
   }
 
-  const selectedText = periods[by.period];
-
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Period' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
+    <ListItemSelect
+      label={t('page.transactions.options.sortBy.period.label')}
+      items={items}
+      selected={by.period}
+      onSelect={(period) => {
+        useGridOptionsStore.setState((state) => ({
+          ...state,
+          sort: {
+            ...state.sort,
+            by: {
+              ...by,
+              period,
+            },
           },
-        }}
-      >
-        {Object.entries(periods).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === status}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const period = key as GridTransactionSortByProfit['period'];
-              useGridOptionsStore.setState((state) => ({
-                ...state,
-                sort: {
-                  ...state.sort,
-                  by: {
-                    ...by,
-                    period,
-                  },
-                },
-              }));
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === by.period} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+        }));
+      }}
+    />
   );
 };

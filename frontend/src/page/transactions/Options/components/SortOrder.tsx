@@ -1,61 +1,36 @@
-import {
-  ListItemButton,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Radio,
-} from '@mui/material';
-import { FC, useRef, useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GridTransactionSortOrder } from '../../../../api/backend/select/grid';
+import { Item } from '../../../../components/ListItem/common';
+import { ListItemSelect } from '../../../../components/ListItem/Select';
 import { useGridOptionsStore } from '../store';
 
-const sortOrders: Record<GridTransactionSortOrder, string> = {
-  asc: 'Asc',
-  desc: 'Desc',
-};
+const items: Item<GridTransactionSortOrder>[] = [
+  {
+    key: 'asc',
+    text: (t) => t('page.transactions.options.sortOrder.value.asc'),
+  },
+  {
+    key: 'desc',
+    text: (t) => t('page.transactions.options.sortOrder.value.desc'),
+  },
+];
 
 export const TransactionsPageOptionsSortOrder: FC = () => {
+  const { t } = useTranslation();
   const order = useGridOptionsStore((state) => state.sort.order);
-  const ref = useRef<HTMLDivElement>(null);
-  const [open, setOpen] = useState(false);
-  const selectedText = sortOrders[order];
 
   return (
-    <>
-      <ListItemButton ref={ref} onClick={() => setOpen(true)}>
-        <ListItemText primary='Order' secondary={selectedText} />
-      </ListItemButton>
-      <Menu
-        anchorEl={ref.current}
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-        MenuListProps={{
-          sx: {
-            width: ref.current?.clientWidth ?? 'auto',
-          },
-        }}
-      >
-        {Object.entries(sortOrders).map(([key, text]) => (
-          <MenuItem
-            key={key}
-            selected={key === order}
-            onClick={() => {
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              const order = key as GridTransactionSortOrder;
-              useGridOptionsStore.setState((state) => ({
-                ...state,
-                sort: { ...state.sort, order },
-              }));
-              setOpen(false);
-            }}
-          >
-            <Radio checked={key === order} />
-            <ListItemText primary={text} />
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
+    <ListItemSelect
+      label={t('page.transactions.options.sortOrder.label')}
+      items={items}
+      selected={order}
+      onSelect={(order) => {
+        useGridOptionsStore.setState((state) => ({
+          ...state,
+          sort: { ...state.sort, order },
+        }));
+      }}
+    />
   );
 };

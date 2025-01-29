@@ -1,17 +1,14 @@
 import i18next, { Resource } from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import en from './en.json';
-import ru from './ru.json';
 
 export const resources: Resource = {
-  en,
-  ru,
+  en: { translation: en },
 };
 
-export const initI18next = async () => {
-  await i18next.use(initReactI18next).init({
+export const i18n = i18next;
+
+export const initI18next = () =>
+  i18next.init({
     resources,
     lng: 'en',
-    fallbackLng: 'en',
   });
-};

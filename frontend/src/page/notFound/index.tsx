@@ -16,16 +16,14 @@ export const NotFoundPage: FC = () => {
       justifyContent='center'
       alignItems='center'
     >
-      <Typography textAlign='center'>
-        {t('page.notFound.label', 'Page not found')}
-      </Typography>
+      <Typography textAlign='center'>{t('page.notFound.label')}</Typography>
       <Button
         variant='contained'
         size='large'
         component={Link}
         to={routeLinks.home}
       >
-        <Typography>{t('page.notFound.goHome', 'Back to home')}</Typography>
+        <Typography>{t('page.notFound.goHome')}</Typography>
       </Button>
     </Stack>
   );
