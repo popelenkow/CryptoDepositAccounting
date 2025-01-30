@@ -49,6 +49,8 @@ export const ListItemMultiSelect = <T extends string>(
         MenuListProps={{
           sx: {
             width: ref.current?.clientWidth,
+            maxHeight: '240px',
+            overflow: 'auto',
           },
         }}
       >
@@ -59,8 +61,9 @@ export const ListItemMultiSelect = <T extends string>(
             onClick={() => {
               onSelect(toggle(selected, item.key));
             }}
+            sx={{ padding: 0 }}
           >
-            <Checkbox checked={selected.includes(item.key)} />
+            <Checkbox size='small' checked={selected.includes(item.key)} />
             <ListItemText primary={renderItemText(item.text, t)} />
           </MenuItem>
         ))}

@@ -1,16 +1,8 @@
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import {
-  Collapse,
-  lighten,
-  List,
-  ListItemButton,
-  ListItemText,
-  Paper,
-} from '@mui/material';
-import { FC, useState } from 'react';
+import { List, Paper } from '@mui/material';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TransactionsPageOptionsInstruments } from './components/Instruments';
+import { ListItemCategory } from './components/ListItemCategory';
 import { TransactionsPageOptionsMode } from './components/Mode';
 import { TransactionsPageOptionsPeriod } from './components/Period';
 import { TransactionsPageOptionsPrediction } from './components/Prediction';
@@ -23,9 +15,6 @@ import { useGridOptionsStore } from './store';
 export const TransactionsPageOptions: FC = () => {
   const { t } = useTranslation();
   const open = useGridOptionsStore((state) => state.open);
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const [displayOpen, setDisplayOpen] = useState(false);
 
   if (!open) {
     return null;
@@ -41,56 +30,20 @@ export const TransactionsPageOptions: FC = () => {
         overflowX: 'hidden',
       }}
     >
-      <ListItemButton
-        onClick={() => setFilterOpen(!filterOpen)}
-        sx={{
-          backgroundColor: (theme) =>
-            lighten(theme.palette.background.paper, 0.1),
-        }}
-      >
-        <ListItemText primary={t('page.transactions.options.title.filter')} />
-        {filterOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={filterOpen}>
-        <List dense disablePadding>
-          <TransactionsPageOptionsStatus />
-          <TransactionsPageOptionsInstruments />
-          <TransactionsPageOptionsSelectType />
-        </List>
-      </Collapse>
-      <ListItemButton
-        onClick={() => setSortOpen(!sortOpen)}
-        sx={{
-          backgroundColor: (theme) =>
-            lighten(theme.palette.background.paper, 0.1),
-        }}
-      >
-        <ListItemText primary={t('page.transactions.options.title.sort')} />
-        {sortOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={sortOpen}>
-        <List dense disablePadding>
-          <TransactionsPageOptionsSortOrder />
-          <TransactionsPageOptionsSortBy />
-        </List>
-      </Collapse>
-      <ListItemButton
-        onClick={() => setDisplayOpen(!displayOpen)}
-        sx={{
-          backgroundColor: (theme) =>
-            lighten(theme.palette.background.paper, 0.1),
-        }}
-      >
-        <ListItemText primary={t('page.transactions.options.title.display')} />
-        {displayOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={displayOpen}>
-        <List dense disablePadding>
-          <TransactionsPageOptionsMode />
-          <TransactionsPageOptionsPeriod />
-          <TransactionsPageOptionsPrediction />
-        </List>
-      </Collapse>
+      <ListItemCategory label={t('page.transactions.options.title.filter')}>
+        <TransactionsPageOptionsStatus />
+        <TransactionsPageOptionsInstruments />
+        <TransactionsPageOptionsSelectType />
+      </ListItemCategory>
+      <ListItemCategory label={t('page.transactions.options.title.sort')}>
+        <TransactionsPageOptionsSortOrder />
+        <TransactionsPageOptionsSortBy />
+      </ListItemCategory>
+      <ListItemCategory label={t('page.transactions.options.title.display')}>
+        <TransactionsPageOptionsMode />
+        <TransactionsPageOptionsPeriod />
+        <TransactionsPageOptionsPrediction />
+      </ListItemCategory>
     </List>
   );
 };

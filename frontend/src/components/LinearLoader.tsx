@@ -1,11 +1,4 @@
-import {
-  BoxProps,
-  Box,
-  keyframes,
-  styled,
-  lighten,
-  darken,
-} from '@mui/material';
+import { BoxProps, Box, keyframes, styled } from '@mui/material';
 import { FC } from 'react';
 
 const width = '20%';
@@ -21,8 +14,8 @@ const LoaderContainer = styled(Box)(({ theme }) => ({
   borderRadius: '1px',
   backgroundColor:
     theme.palette.mode === 'light'
-      ? lighten(theme.palette.primary.main, 0.62)
-      : darken(theme.palette.primary.main, 0.5),
+      ? theme.palette.primary.mainL062
+      : theme.palette.primary.mainD05,
   overflow: 'hidden',
   position: 'relative',
 }));

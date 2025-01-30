@@ -1,9 +1,25 @@
-import { createTheme } from '@mui/material';
+import { createTheme, darken, lighten } from '@mui/material';
+
+const baseTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export const appTheme = createTheme({
   spacing: 4,
   palette: {
     mode: 'dark',
+    primary: {
+      ...baseTheme.palette.primary,
+      mainL062: lighten(baseTheme.palette.primary.main, 0.62),
+      mainD05: darken(baseTheme.palette.primary.main, 0.5),
+    },
+    background: {
+      ...baseTheme.palette.background,
+      paperL005: lighten(baseTheme.palette.background.paper, 0.05),
+      paperL01: lighten(baseTheme.palette.background.paper, 0.1),
+    },
     red: {
       light: '#ffc2c2',
       medium: '#ff8888',
@@ -90,6 +106,11 @@ export const appTheme = createTheme({
           padding: '8px',
         },
         head: (props) => props.theme.typography.subtitle1,
+      },
+    },
+    MuiList: {
+      defaultProps: {
+        dense: true,
       },
     },
   },

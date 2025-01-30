@@ -51,8 +51,9 @@ export const ListItemSelect = <T extends string>(
               onSelect(item.key);
               setOpen(false);
             }}
+            sx={{ padding: 0 }}
           >
-            <Radio checked={item.key === selected} />
+            <Radio size='small' checked={item.key === selected} />
             <ListItemText primary={renderItemText(item.text, t)} />
           </MenuItem>
         ))}

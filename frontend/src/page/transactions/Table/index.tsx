@@ -1,4 +1,4 @@
-import { lighten, Table, TableContainer, TableHead } from '@mui/material';
+import { Table, TableContainer, TableHead } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import { getGridTransactionsOptions } from '../../../api/backend/select/grid';
@@ -16,8 +16,7 @@ export const TransactionsPageTable: FC = () => {
       <Table
         stickyHeader
         sx={{
-          backgroundColor: (theme) =>
-            lighten(theme.palette.background.paper, 0.05),
+          backgroundColor: (theme) => theme.palette.background.paperL005,
         }}
       >
         <TableHead
@@ -26,8 +25,7 @@ export const TransactionsPageTable: FC = () => {
             top: 0,
             zIndex: 1,
             '& th': {
-              backgroundColor: (theme) =>
-                lighten(theme.palette.background.paper, 0.1),
+              backgroundColor: (theme) => theme.palette.background.paperL01,
             },
           }}
         >
