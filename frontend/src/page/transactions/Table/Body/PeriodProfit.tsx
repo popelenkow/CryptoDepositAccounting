@@ -1,7 +1,10 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GridTransactionData } from '../../../../api/backend/types';
+import {
+  GridTransactionData,
+  InstrumentInfo,
+} from '../../../../api/backend/types';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridPeriodFunding } from '../../../../common/grid/funding';
 import { getGridPeriodSpot } from '../../../../common/grid/spot';
@@ -11,11 +14,12 @@ import { useGridOptionsStore } from '../../Options/store';
 
 export type GridsBodyPeriodProfitProps = {
   transaction: GridTransactionData;
+  info: InstrumentInfo;
 };
 export const GridsBodyPeriodProfit: FC<GridsBodyPeriodProfitProps> = (
   props,
 ) => {
-  const { transaction } = props;
+  const { transaction, info } = props;
 
   const { t } = useTranslation();
   const mode = useGridOptionsStore((state) => state.mode);
@@ -25,7 +29,7 @@ export const GridsBodyPeriodProfit: FC<GridsBodyPeriodProfitProps> = (
   const symbol = currencySymbols[mode];
 
   const total = getGridPeriodTotal(transaction, mode, period);
-  const spot = getGridPeriodSpot(transaction, mode, period);
+  const spot = getGridPeriodSpot(transaction, info, mode, period, false);
   const funding = getGridPeriodFunding(transaction, mode, period);
   const grid = getGridPeriodTrades(transaction, mode, period, prediction);
 

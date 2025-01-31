@@ -12,8 +12,9 @@ import {
   getGridTrades,
   IncomeMode,
 } from '../../../common/grid/trade';
+import { findInstrumentInfo } from '../../../common/instrumentInfo';
 import { getTransactionsOptions } from '../endpoints';
-import { Transaction } from '../types';
+import { InstrumentInfo, Transaction } from '../types';
 
 const checkGridTransaction = (
   transaction: Transaction,
@@ -85,6 +86,7 @@ export type GridTransactionSort = {
 
 const getSortValue = (
   transaction: Transaction<'grid'>,
+  info: InstrumentInfo,
   by: GridTransactionSortBy,
 ): number | string => {
   const { id, data } = transaction;
@@ -94,7 +96,7 @@ const getSortValue = (
         return getGridPeriodTotal(data, by.mode, 'daily');
       }
       if (by.type === 'spot') {
-        return getGridPeriodSpot(data, by.mode, 'daily');
+        return getGridPeriodSpot(data, info, by.mode, 'daily', false);
       }
       if (by.type === 'funding') {
         return getGridPeriodTotal(data, by.mode, 'daily');
@@ -109,7 +111,7 @@ const getSortValue = (
         return getGridTotal(data, by.mode);
       }
       if (by.type === 'spot') {
-        return getGridSpot(data, by.mode);
+        return getGridSpot(data, info, by.mode, false);
       }
       if (by.type === 'funding') {
         return getGridFunding(data, by.mode);
@@ -147,13 +149,21 @@ const getSortValue = (
   return assertNever(by);
 };
 
-const getSort = (sort?: GridTransactionSort) => {
+const getSort = (infos: InstrumentInfo[], sort?: GridTransactionSort) => {
   if (!sort) return () => 0;
 
   const { order, by } = sort;
   return (a: Transaction<'grid'>, b: Transaction<'grid'>) => {
-    const aValue = getSortValue(a, by);
-    const bValue = getSortValue(b, by);
+    const aValue = getSortValue(
+      a,
+      findInstrumentInfo(infos, a.data.instrument),
+      by,
+    );
+    const bValue = getSortValue(
+      b,
+      findInstrumentInfo(infos, b.data.instrument),
+      by,
+    );
 
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       if (order === 'desc') {
@@ -202,7 +212,7 @@ export const getGridTransactionsOptions = (
       const select = selectGridTransactionsMap[selectType];
       const selectedGrids = select(instrumentGrids);
 
-      return selectedGrids.sort(getSort(sort));
+      return selectedGrids.sort(getSort([], sort));
     },
   });
 };

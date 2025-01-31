@@ -13,20 +13,20 @@ import { useGridList } from '../../useGridList';
 export const GridsCumulativeTotalProfit: FC = () => {
   const { t } = useTranslation();
   const mode = useGridOptionsStore((state) => state.mode);
-  const list = useGridList();
+  const { transactions, infos } = useGridList();
 
   const symbol = currencySymbols[mode];
 
-  const deposit = list.reduce((acc, x) => acc + x.data.amount, 0);
+  const deposit = transactions.reduce((acc, x) => acc + x.data.amount, 0);
   const divisorToPercent = deposit / 100;
   const divisor = mode === 'usdt' ? 1 : divisorToPercent;
 
-  const transactions = list.map((x) => x.data);
+  const list = transactions.map((x) => x.data);
 
-  const total = getGridsTotal(transactions, 'usdt');
-  const spot = getGridsSpot(transactions, 'usdt');
-  const funding = getGridsFunding(transactions, 'usdt');
-  const grid = getGridsTrades(transactions, 'usdt');
+  const total = getGridsTotal(list, 'usdt');
+  const spot = getGridsSpot(list, infos, 'usdt', false);
+  const funding = getGridsFunding(list, 'usdt');
+  const grid = getGridsTrades(list, 'usdt');
 
   return (
     <TableCell align='right'>

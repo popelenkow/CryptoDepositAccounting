@@ -14,7 +14,7 @@ export const getGridPrices = (
   transaction: GridTransactionData,
   instrumentInfo: InstrumentInfo,
   side: 'buy' | 'sell',
-  floor = false,
+  floor: boolean,
 ) => {
   const { grids, minPrice } = transaction;
   const { priceStep } = instrumentInfo;

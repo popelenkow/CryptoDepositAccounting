@@ -6,11 +6,11 @@ import { useGridList } from '../../useGridList';
 
 export const GridsCumulativeTime: FC = () => {
   const { t } = useTranslation();
-  const list = useGridList();
+  const { transactions } = useGridList();
 
-  const transactions = list.map((x) => x.data);
+  const list = transactions.map((x) => x.data);
 
-  const duration = getGridsDuration(transactions);
+  const duration = getGridsDuration(list);
 
   return (
     <TableCell align='right'>

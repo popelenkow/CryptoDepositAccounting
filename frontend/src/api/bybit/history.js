@@ -1,3 +1,5 @@
+// Dev tools script
+
 const getData = (page, bot_id) =>
   fetch('https://api2.bybit.com/s1/bot/fgrid/v1/get-fgrid-history-orders', {
     headers: {

@@ -8,12 +8,12 @@ import { useGridList } from './useGridList';
 export const TransactionsPageTitle: FC = () => {
   const { t } = useTranslation();
   const open = useGridOptionsStore((state) => state.open);
-  const list = useGridList();
+  const { transactions } = useGridList();
 
   return (
     <Stack direction='row' gap={2} justifyContent='space-between'>
       <Typography variant='h5'>
-        {t('page.transactions.label')} ({list.length})
+        {t('page.transactions.label')} ({transactions.length})
       </Typography>
       <IconButton
         color={open ? 'primary' : undefined}

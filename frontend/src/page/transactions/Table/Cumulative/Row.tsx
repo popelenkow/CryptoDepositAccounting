@@ -9,7 +9,7 @@ import { GridsCumulativeTotalProfit } from './TotalProfit';
 
 export const GridsCumulativeRow: FC = () => {
   const { t } = useTranslation();
-  const transactions = useGridList();
+  const { transactions } = useGridList();
 
   if (!transactions.length) {
     return null;

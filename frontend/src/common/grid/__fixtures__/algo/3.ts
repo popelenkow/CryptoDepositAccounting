@@ -25,6 +25,8 @@ export const data: TransactionData<'grid'> = {
 
 export const quantity = 2.2;
 
+export const gridError = data.trades * 0.00001 * 2.885;
+
 export const orders = [
   { buy: 0.43, sell: 0.4318, profit: 0.0035, count: 62 },
   { buy: 0.4318, sell: 0.4337, profit: 0.0037, count: 49 },

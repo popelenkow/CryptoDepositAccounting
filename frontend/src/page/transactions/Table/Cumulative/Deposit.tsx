@@ -6,11 +6,12 @@ import { useGridList } from '../../useGridList';
 
 export const GridsCumulativeDeposit: FC = () => {
   const { t } = useTranslation();
-  const list = useGridList();
+  const { transactions } = useGridList();
 
-  const deposit = list.reduce((acc, x) => acc + x.data.amount, 0);
+  const deposit = transactions.reduce((acc, x) => acc + x.data.amount, 0);
   const leverage =
-    list.reduce((acc, x) => acc + x.data.leverage, 0) / list.length;
+    transactions.reduce((acc, x) => acc + x.data.leverage, 0) /
+    transactions.length;
 
   return (
     <TableCell align='right'>

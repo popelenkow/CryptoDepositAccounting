@@ -1,7 +1,10 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GridTransactionData } from '../../../../api/backend/types';
+import {
+  GridTransactionData,
+  InstrumentInfo,
+} from '../../../../api/backend/types';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
 import { getGridFunding } from '../../../../common/grid/funding';
@@ -12,9 +15,10 @@ import { useGridOptionsStore } from '../../Options/store';
 
 export type GridsBodyTotalProfitProps = {
   transaction: GridTransactionData;
+  info: InstrumentInfo;
 };
 export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
-  const { transaction } = props;
+  const { transaction, info } = props;
 
   const { t } = useTranslation();
 
@@ -24,8 +28,8 @@ export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
   const totalPercent = getGridTotal(transaction, 'percent');
   const total = getGridTotal(transaction, mode).toFixed(2);
 
-  const spotPercent = getGridSpot(transaction, 'percent');
-  const spot = getGridSpot(transaction, mode).toFixed(2);
+  const spotPercent = getGridSpot(transaction, info, 'percent', false);
+  const spot = getGridSpot(transaction, info, mode, false).toFixed(2);
 
   const fundingPercent = getGridFunding(transaction, 'percent');
   const funding = getGridFunding(transaction, mode).toFixed(2);
