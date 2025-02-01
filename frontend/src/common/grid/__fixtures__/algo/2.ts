@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'ALGOUSDT',
   amount: 105,
+  leverage: 1.4,
+  totalProfit: -24.09471806,
+  spotProfit: 0,
+  fundingProfit: -1.34,
+  gridProfit: 0,
+  trades: 1255,
+  grids: 92,
+  quantity: 2.1,
   minPrice: 0.475,
   maxPrice: 0.712,
-  currentPrice: 0.4114,
   startPrice: 0.5898,
-  endPrice: 0,
+  endPrice: 0.4114,
+  duration: 3053856,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.4,
-  duration: 3053856,
-  trades: 1255,
-  total: -24.09471806,
-  funding: -1.34,
+  detailTime: '2025-01-07T13:42:12.141Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T13:42:12.141Z',
 };
-
-export const quantity = 2.1;
 
 export const gridError = data.trades * 0.00001 * 3.58;
 

@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'FTMUSDT',
   amount: 109,
+  leverage: 1.4,
+  totalProfit: -31.85759021,
+  spotProfit: 0,
+  fundingProfit: -1.2,
+  gridProfit: 0,
+  trades: 2834,
+  grids: 93,
+  quantity: 1,
   minPrice: 1.013,
   maxPrice: 1.519,
-  currentPrice: 0.7178,
   startPrice: 1.2656,
-  endPrice: 0,
+  endPrice: 0.7178,
+  duration: 2959750,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 93,
-  leverage: 1.4,
-  duration: 2959750,
-  trades: 2834,
-  total: -31.85759021,
-  funding: -1.2,
+  detailTime: '2025-01-07T17:00:49.614Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T17:00:49.614Z',
 };
-
-export const quantity = 1;
 
 export const gridError = data.trades * 0.00001 * 6.668;
 

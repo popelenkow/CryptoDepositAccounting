@@ -3,20 +3,24 @@ import { assertNever } from './assert';
 
 export type IncomePeriod = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
-export const toPeriodValue = (daily: number, period: IncomePeriod) => {
+export const getPeriodValue = (period: IncomePeriod) => {
   if (period === 'daily') {
-    return daily;
+    return 1;
   }
   if (period === 'weekly') {
-    return daily * 7;
+    return 7;
   }
   if (period === 'monthly') {
-    return daily * 30;
+    return 30;
   }
   if (period === 'yearly') {
-    return daily * 365;
+    return 365;
   }
   return assertNever(period);
+};
+export const toPeriodValue = (daily: number, period: IncomePeriod) => {
+  const periodValue = getPeriodValue(period);
+  return daily * periodValue;
 };
 
 export const periodNames: Record<IncomePeriod, (t: TFunction) => string> = {

@@ -5,14 +5,14 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import { getHistoryGridsOptions } from '../../../api/bybit/endpoints';
-import { createTransaction } from '../common/map';
+import { calcTransactionProfits, createTransaction } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncHistory: FC = () => {
   const { t } = useTranslation();
   const tabId = useActiveTabId();
-  const list = useGridList();
+  const { transactions, infos } = useGridList();
 
   const importTransactions = useMutation(importTransactionsOptions);
   const getHistoryGrids = useMutation(getHistoryGridsOptions(tabId));
@@ -27,15 +27,16 @@ export const SyncHistory: FC = () => {
       endIcon={<SyncIcon />}
       onClick={async () => {
         const response = await getHistoryGrids.mutateAsync();
-        const bots = response.result.bots
+        const newTransactions = response.result.bots
           .filter(
             (bot) =>
               bot.future_grid.close_detail?.bot_close_code !==
               'BOT_CLOSE_CODE_FAILED_INITIATION',
           )
-          .map((bot) => createTransaction(bot.future_grid, list));
-        bots.reverse();
-        importTransactions.mutate(bots);
+          .map((bot) => createTransaction(bot.future_grid, transactions))
+          .map((transaction) => calcTransactionProfits(transaction, infos));
+        newTransactions.reverse();
+        importTransactions.mutate(newTransactions);
       }}
     >
       {t('page.extensionPopup.syncHistory')}

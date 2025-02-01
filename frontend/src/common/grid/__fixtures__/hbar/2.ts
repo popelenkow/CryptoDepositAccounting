@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'HBARUSDT',
   amount: 117.2,
+  leverage: 1.4,
+  totalProfit: 22.28921162,
+  spotProfit: 0,
+  fundingProfit: -1.36,
+  gridProfit: 0,
+  trades: 6020,
+  grids: 92,
+  quantity: 4,
   minPrice: 0.277,
   maxPrice: 0.41551,
-  currentPrice: 0.31282,
   startPrice: 0.34335,
-  endPrice: 0.4156,
+  endPrice: 0.31282,
+  duration: 4700703,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.4,
-  duration: 4700703,
-  trades: 6020,
-  total: 22.28921162,
-  funding: -1.36,
+  detailTime: '2025-01-30T13:18:05.844Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-30T13:18:05.844Z',
 };
-
-export const quantity = 4;
 
 export const gridError = data.trades * 0.00001 * 5.839;
 

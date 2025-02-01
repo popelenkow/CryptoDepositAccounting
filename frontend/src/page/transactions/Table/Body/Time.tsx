@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridTransactionData } from '../../../../api/backend/types';
 import { currencySymbols } from '../../../../common/currency';
-import { getGridDuration } from '../../../../common/grid/time';
 import { getGridTrade } from '../../../../common/grid/trade';
 import { toUiDateTime } from '../../../../common/time';
 import { useGridOptionsStore } from '../../Options/store';
@@ -28,7 +27,7 @@ export const GridsBodyTime: FC<GridsBodyTimeProps> = (props) => {
           {t('page.transactions.table.body.duration')}
         </Typography>
         <Typography variant='body2'>
-          {`${getGridDuration(transaction).toFixed(2)} days`}
+          {`${transaction.duration.toFixed(2)} days`}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>

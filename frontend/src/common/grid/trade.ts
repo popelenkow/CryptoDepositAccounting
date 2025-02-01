@@ -10,8 +10,8 @@ export type IncomeMode = 'usdt' | 'percent';
 export type IncomePrediction = 'pessimistic' | 'optimistic';
 
 export const isGridOutOfTrade = (transaction: GridTransactionData) => {
-  const { close, currentPrice, minPrice } = transaction;
-  return close === 'pending' && currentPrice < minPrice;
+  const { close, endPrice, minPrice } = transaction;
+  return close === 'pending' && endPrice < minPrice;
 };
 
 export const getGridTradeQuantity = (

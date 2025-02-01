@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: '1000000MOGUSDT',
   amount: 201,
+  leverage: 1.5,
+  totalProfit: 19.71567302,
+  spotProfit: 0,
+  fundingProfit: -0.79,
+  gridProfit: 0,
+  trades: 2338,
+  grids: 92,
+  quantity: 1,
   minPrice: 2.0364,
   maxPrice: 3.0546,
-  currentPrice: 2.5001,
   startPrice: 2.5454,
-  endPrice: 0,
+  endPrice: 2.5001,
+  duration: 1682222,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.5,
-  duration: 1682222,
-  trades: 2338,
-  total: 19.71567302,
-  funding: -0.79,
+  detailTime: '2025-01-07T17:00:51.916Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T17:00:51.916Z',
 };
-
-export const quantity = 1;
 
 export const gridError = data.trades * 0.00001 * 23.2;
 

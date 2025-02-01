@@ -8,12 +8,12 @@ export const getGridFunding = (
   transaction: GridTransactionData,
   mode: IncomeMode,
 ) => {
-  const { funding, amount } = transaction;
+  const { fundingProfit, amount } = transaction;
   if (mode === 'percent') {
-    return (funding / amount) * 100;
+    return (fundingProfit / amount) * 100;
   }
   if (mode === 'usdt') {
-    return funding;
+    return fundingProfit;
   }
   return assertNever(mode);
 };

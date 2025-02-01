@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: '1000NEIROCTOUSDT',
   amount: 91.9,
+  leverage: 1.5,
+  totalProfit: -5.04411583,
+  spotProfit: 0,
+  fundingProfit: -0.45,
+  gridProfit: 0,
+  trades: 2426,
+  grids: 92,
+  quantity: 1,
   minPrice: 0.9306,
   maxPrice: 1.3959,
-  currentPrice: 0.9387,
   startPrice: 1.162,
-  endPrice: 0,
+  endPrice: 0.9387,
+  duration: 1685071,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.5,
-  duration: 1685071,
-  trades: 2426,
-  total: -5.04411583,
-  funding: -0.45,
+  detailTime: '2025-01-07T17:00:45.473Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T17:00:45.473Z',
 };
-
-export const quantity = 1;
 
 export const gridError = data.trades * 0.00001 * 2.764;
 

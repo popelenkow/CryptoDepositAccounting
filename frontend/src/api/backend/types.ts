@@ -48,21 +48,25 @@ export type GridTransactionData = {
   type: 'grid';
   instrument: string;
   amount: number;
+  leverage: number;
+  totalProfit: number;
+  spotProfit: number;
+  fundingProfit: number;
+  gridProfit: number;
+  trades: number;
+  grids: number;
+  quantity: number;
   minPrice: number;
   maxPrice: number;
-  currentPrice: number;
   startPrice: number;
   endPrice: number;
+  duration: number;
   startTime: string;
   endTime: string;
-  grids: number;
-  leverage: number;
-  duration: number;
-  trades: number;
-  total: number;
-  funding: number;
+  detailTime: string;
+  detailStatus: 'init' | 'pending' | 'close';
+  profitStatus: 'init' | 'infoError' | 'done';
   close: 'pending' | 'manual' | 'auto';
-  lastUpdate: string | 'open' | 'close';
 };
 
 type TransactionDataDict = {

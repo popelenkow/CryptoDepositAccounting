@@ -1,10 +1,23 @@
-import { GridTransactionData, Transaction } from '../../../api/backend/types';
+import {
+  GridTransactionData,
+  InstrumentInfo,
+  Transaction,
+} from '../../../api/backend/types';
 import { FutureGrid } from '../../../api/bybit/types/grid';
 import { FutureGridDetail } from '../../../api/bybit/types/gridDetail';
+import { getGridSpot } from '../../../common/grid/spot';
+import { mapSecondsToDays } from '../../../common/time';
 
 type GridTransactionInfo = Pick<
   GridTransactionData,
-  'startPrice' | 'endPrice' | 'funding' | 'startTime' | 'endTime' | 'lastUpdate'
+  | 'fundingProfit'
+  | 'quantity'
+  | 'startPrice'
+  | 'endPrice'
+  | 'startTime'
+  | 'endTime'
+  | 'detailTime'
+  | 'detailStatus'
 >;
 
 const getClose = (grid: FutureGrid): GridTransactionData['close'] => {
@@ -23,55 +36,45 @@ const toTransaction = (grid: FutureGrid): GridTransactionData => {
     type: 'grid',
     instrument: grid.symbol,
     amount: Number(grid.total_investment),
+    leverage: Number(grid.leverage),
+    totalProfit: Number(grid.pnl),
+    spotProfit: 0,
+    fundingProfit: 0,
+    gridProfit: 0,
+    trades: Number(grid.arbitrage_num),
+    grids: Number(grid.cell_num),
+    quantity: 1,
     minPrice: Number(grid.min_price),
     maxPrice: Number(grid.max_price),
-    currentPrice: Number(grid.current_price || '0'),
     startPrice: 0,
-    endPrice: 0,
+    endPrice: Number(grid.current_price || '0'),
+    duration: mapSecondsToDays(Number(grid.running_duration)),
     startTime: new Date().toISOString(),
     endTime: new Date().toISOString(),
-    grids: Number(grid.cell_num),
-    leverage: Number(grid.leverage),
-    duration: Number(grid.running_duration),
-    trades: Number(grid.arbitrage_num),
-    total: Number(grid.pnl),
-    funding: 0,
+    detailTime: new Date().toISOString(),
+    detailStatus: 'init',
+    profitStatus: 'init',
     close: getClose(grid),
-    lastUpdate: 'open',
   };
   return transaction;
 };
 
 const toTransactionInfo = (
-  rawDetail: FutureGridDetail & { timestamp: string },
+  rawDetail: FutureGridDetail & { timestamp: string; quantity: string },
 ): GridTransactionInfo => {
   const pending = rawDetail.status === 'RUNNING';
 
   const detail: GridTransactionInfo = {
+    fundingProfit: -Number(rawDetail.funding_fee),
+    quantity: Number(rawDetail.quantity),
     startPrice: Number(rawDetail.entry_price),
     endPrice: Number(rawDetail.real_close_price || rawDetail.take_profit_price),
     startTime: new Date(Number(rawDetail.create_time)).toISOString(),
     endTime: new Date(Number(rawDetail.end_time)).toISOString(),
-    funding: -Number(rawDetail.funding_fee),
-    lastUpdate: pending
-      ? new Date(Number(rawDetail.timestamp) * 1000).toISOString()
-      : 'close',
+    detailTime: new Date(Number(rawDetail.timestamp) * 1000).toISOString(),
+    detailStatus: pending ? 'pending' : 'close',
   };
   return detail;
-};
-
-const mergeTransactionInfo = (
-  transaction: GridTransactionData,
-  info?: GridTransactionInfo,
-): GridTransactionData => {
-  if (!info) {
-    return transaction;
-  }
-
-  return {
-    ...transaction,
-    ...info,
-  };
 };
 
 const mapInfo = (
@@ -82,12 +85,14 @@ const mapInfo = (
   }
 
   return {
+    fundingProfit: transaction.fundingProfit,
+    quantity: transaction.quantity,
     startPrice: transaction.startPrice,
     endPrice: transaction.endPrice,
     startTime: transaction.startTime,
     endTime: transaction.endTime,
-    funding: transaction.funding,
-    lastUpdate: transaction.lastUpdate,
+    detailTime: transaction.detailTime,
+    detailStatus: transaction.detailStatus,
   };
 };
 
@@ -97,15 +102,53 @@ export const createTransaction = (
 ): GridTransactionData => {
   const data = toTransaction(rowData);
   const prev = list.find((x) => x.data.orderId === data.orderId);
-  const result = mergeTransactionInfo(data, mapInfo(prev?.data));
+  const result: GridTransactionData = {
+    ...data,
+    ...mapInfo(prev?.data),
+    endPrice: data.endPrice,
+  };
   return result;
 };
 
 export const injectTransactionDetail = (
   data: GridTransactionData,
-  detail: FutureGridDetail & { timestamp: string },
+  detail: FutureGridDetail & { timestamp: string; quantity: string },
 ): GridTransactionData => {
   const info = toTransactionInfo(detail);
-  const result = mergeTransactionInfo(data, info);
+  const result: GridTransactionData = {
+    ...data,
+    ...info,
+    endPrice: data.close === 'pending' ? data.endPrice : info.endPrice,
+  };
   return result;
+};
+
+export const calcTransactionProfits = (
+  transaction: GridTransactionData,
+  infos: InstrumentInfo[],
+): GridTransactionData => {
+  if (transaction.detailStatus === 'init') {
+    return transaction;
+  }
+  const info = infos.find((x) => x.instrument === transaction.instrument);
+  const defaultInfo: InstrumentInfo = {
+    id: -1,
+    instrument: transaction.instrument,
+    priceStep: 1,
+    quantityStep: 1,
+  };
+  const { totalProfit, fundingProfit } = transaction;
+  const spotProfit = getGridSpot(
+    transaction,
+    info ?? defaultInfo,
+    'usdt',
+    false,
+  );
+  const gridProfit = totalProfit - fundingProfit - spotProfit;
+  return {
+    ...transaction,
+    spotProfit,
+    gridProfit,
+    profitStatus: info === undefined ? 'infoError' : 'done',
+  };
 };

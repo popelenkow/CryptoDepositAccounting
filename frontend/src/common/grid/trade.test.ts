@@ -24,7 +24,6 @@ type FixtureData = {
   data: TransactionData<'grid'>;
   info: InstrumentInfo;
   orders: GridHistoryOrder[];
-  quantity: number;
   gridError: number;
 };
 
@@ -47,16 +46,19 @@ const testTrades = (fixture: FixtureData, floor: boolean) => {
     const profit = sell - buy - buyCommission - sellCommission;
     return floorTo(profit, 4);
   });
-  const spot = getGridSpot(data, info, 'usdt', floor);
-  const grid = orders.reduce((acc, x) => acc + x.profit * x.count, 0);
-  const total = roundTo(spot + data.funding + grid + gridError, 4);
+  const spotProfit = getGridSpot(data, info, 'usdt', floor);
+  const gridProfit = orders.reduce((acc, x) => acc + x.profit * x.count, 0);
+  const totalProfit = roundTo(
+    spotProfit + data.fundingProfit + gridProfit + gridError,
+    4,
+  );
 
   expect(trades).toBe(data.trades);
-  expect(quantity).toBe(fixture.quantity);
+  expect(quantity).toBe(data.quantity);
   expect(buyPrices).toStrictEqual(orders.map((x) => x.buy));
   expect(sellPrices).toStrictEqual(orders.map((x) => x.sell));
   expect(profits).toStrictEqual(orders.map((x) => x.profit));
-  expect(total).toBe(roundTo(data.total, 4));
+  expect(totalProfit).toBe(roundTo(data.totalProfit, 4));
 };
 
 describe('trade', () => {

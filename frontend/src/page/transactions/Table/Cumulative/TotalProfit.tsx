@@ -1,32 +1,34 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Transaction } from '../../../../api/backend/types';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
-import { getGridsFunding } from '../../../../common/grid/funding';
-import { getGridsSpot } from '../../../../common/grid/spot';
-import { getGridsTotal } from '../../../../common/grid/total';
-import { getGridsTrades } from '../../../../common/grid/trade';
+import { getMultiplier } from '../../../../common/multiplier';
 import { useGridOptionsStore } from '../../Options/store';
 import { useGridList } from '../../useGridList';
 
 export const GridsCumulativeTotalProfit: FC = () => {
   const { t } = useTranslation();
   const mode = useGridOptionsStore((state) => state.mode);
-  const { transactions, infos } = useGridList();
+  const { transactions } = useGridList();
 
   const symbol = currencySymbols[mode];
 
-  const deposit = transactions.reduce((acc, x) => acc + x.data.amount, 0);
-  const divisorToPercent = deposit / 100;
-  const divisor = mode === 'usdt' ? 1 : divisorToPercent;
+  const amount = transactions.reduce((acc, x) => acc + x.data.amount, 0);
 
-  const list = transactions.map((x) => x.data);
+  const multiplier = getMultiplier({ amount, mode });
+  const percentMultiplier = getMultiplier({ amount, mode: 'percent' });
 
-  const total = getGridsTotal(list, 'usdt');
-  const spot = getGridsSpot(list, infos, 'usdt', false);
-  const funding = getGridsFunding(list, 'usdt');
-  const grid = getGridsTrades(list, 'usdt');
+  type GetValue = (transaction: Transaction<'grid'>) => number;
+  const toPreview = (getValue: GetValue) => {
+    const result = transactions.reduce((acc, x) => acc + getValue(x), 0);
+    return `${(result * multiplier).toFixed(2)} ${symbol}`;
+  };
+  const toColor = (getValue: GetValue) => {
+    const result = transactions.reduce((acc, x) => acc + getValue(x), 0);
+    return getProfitPercentColor(result * percentMultiplier);
+  };
 
   return (
     <TableCell align='right'>
@@ -34,22 +36,16 @@ export const GridsCumulativeTotalProfit: FC = () => {
         <Typography variant='body2'>
           {t('page.transactions.table.body.total')}
         </Typography>
-        <Typography
-          variant='body2'
-          color={getProfitPercentColor(total / divisorToPercent)}
-        >
-          {(total / divisor).toFixed(2)} {symbol}
+        <Typography variant='body2' color={toColor((x) => x.data.totalProfit)}>
+          {toPreview((x) => x.data.totalProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography variant='body2'>
           {t('page.transactions.table.body.spot')}
         </Typography>
-        <Typography
-          variant='body2'
-          color={getProfitPercentColor(spot / divisorToPercent)}
-        >
-          {(spot / divisor).toFixed(2)} {symbol}
+        <Typography variant='body2' color={toColor((x) => x.data.spotProfit)}>
+          {toPreview((x) => x.data.spotProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
@@ -58,20 +54,17 @@ export const GridsCumulativeTotalProfit: FC = () => {
         </Typography>
         <Typography
           variant='body2'
-          color={getProfitPercentColor(funding / divisorToPercent)}
+          color={toColor((x) => x.data.fundingProfit)}
         >
-          {(funding / divisor).toFixed(2)} {symbol}
+          {toPreview((x) => x.data.fundingProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography variant='body2'>
           {t('page.transactions.table.body.grid')}
         </Typography>
-        <Typography
-          variant='body2'
-          color={getProfitPercentColor(grid / divisorToPercent)}
-        >
-          {(grid / divisor).toFixed(2)} {symbol}
+        <Typography variant='body2' color={toColor((x) => x.data.gridProfit)}>
+          {toPreview((x) => x.data.gridProfit)}
         </Typography>
       </Stack>
     </TableCell>

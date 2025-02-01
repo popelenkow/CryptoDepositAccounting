@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { getInstrumentInfosOptions } from '../../api/backend/endpoints';
 import {
   getGridTransactionsOptions,
   GridTransactionSort,
@@ -9,7 +10,9 @@ const sort: GridTransactionSort = {
   by: { category: 'other', type: 'id' },
 };
 export const useGridList = () => {
-  const transactions = useQuery(getGridTransactionsOptions({ sort }));
+  const transactions =
+    useQuery(getGridTransactionsOptions({ sort })).data ?? [];
+  const infos = useQuery(getInstrumentInfosOptions).data ?? [];
 
-  return transactions.data ?? [];
+  return { transactions, infos };
 };

@@ -4,51 +4,55 @@ import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
-import { getGridDetailOptions } from '../../../api/bybit/endpoints';
+import {
+  getGridDetailOptions,
+  getGridHistoryOrdersOptions,
+} from '../../../api/bybit/endpoints';
 import { mapSecondsToDays } from '../../../common/time';
-import { injectTransactionDetail } from '../common/map';
+import { calcTransactionProfits, injectTransactionDetail } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncDetail: FC = () => {
   const { t } = useTranslation();
   const tabId = useActiveTabId();
-  const list = useGridList();
+  const { transactions, infos } = useGridList();
 
   const importTransactions = useMutation(importTransactionsOptions);
   const getGridDetail = useMutation(getGridDetailOptions(tabId));
+  const getGridHistoryOrders = useMutation(getGridHistoryOrdersOptions(tabId));
 
   if (!tabId) return null;
 
-  const outdatedTransactions = list.filter((x) => {
-    const { close, lastUpdate } = x.data;
+  const outdatedTransactions = transactions.filter((x) => {
+    const { close, detailStatus } = x.data;
     if (close === 'pending') {
-      return lastUpdate === 'open';
+      return detailStatus === 'init';
     }
-    return lastUpdate !== 'close';
+    return detailStatus !== 'close';
   });
-  const sortedTransactions = list
+  const sortedTransactions = transactions
     .filter((x) => x.data.close === 'pending')
     .sort(
       (a, b) =>
-        new Date(a.data.lastUpdate).getTime() -
-        new Date(b.data.lastUpdate).getTime(),
+        new Date(a.data.detailTime).getTime() -
+        new Date(b.data.detailTime).getTime(),
     );
 
   const getText = () => {
     if (outdatedTransactions.length > 0) {
       const value = outdatedTransactions.length;
-      return t('page.extensionPopup.syncDetailOutdated', { value });
+      return t('page.extensionPopup.syncDetail.outdated', { value });
     }
     if (sortedTransactions.length > 0) {
       const today = new Date().getTime();
       const lastUpdate = new Date(
-        sortedTransactions[0].data.lastUpdate,
+        sortedTransactions[0].data.detailTime,
       ).getTime();
       const value = mapSecondsToDays((today - lastUpdate) / 1000).toFixed(2);
-      return t('page.extensionPopup.syncDetailDays', { value });
+      return t('page.extensionPopup.syncDetail.days', { value });
     }
-    return '';
+    return t('page.extensionPopup.syncDetail.none');
   };
 
   return (
@@ -64,23 +68,26 @@ export const SyncDetail: FC = () => {
           }
           return sortedTransactions;
         };
-        const transactions = getTransactions().slice(0, 5);
 
-        const promise = transactions.map(async (transaction) => {
-          const { orderId } = transaction.data;
-          const detail = await getGridDetail.mutateAsync(orderId);
-          const data = injectTransactionDetail(transaction.data, {
-            ...detail.result.detail,
-            timestamp: detail.time_now,
+        const promise = getTransactions()
+          .slice(0, 5)
+          .map(async (transaction) => {
+            const { orderId } = transaction.data;
+            const detail = await getGridDetail.mutateAsync(orderId);
+            const orders = await getGridHistoryOrders.mutateAsync(orderId);
+            const data = injectTransactionDetail(transaction.data, {
+              ...detail.result.detail,
+              timestamp: detail.time_now,
+              quantity: orders.result.pairs[0].open_order.quantity,
+            });
+            const result = calcTransactionProfits(data, infos);
+            return result;
           });
-          return data;
-        });
         const newTransactions = await Promise.all(promise);
-
         importTransactions.mutate(newTransactions);
       }}
     >
-      {t('page.extensionPopup.syncDetail', { text: getText() })}
+      {t('page.extensionPopup.syncDetail.button', { text: getText() })}
     </LoadingButton>
   );
 };

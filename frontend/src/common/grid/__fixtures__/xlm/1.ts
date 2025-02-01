@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'XLMUSDT',
   amount: 185,
+  leverage: 1.4,
+  totalProfit: -10.08179156,
+  spotProfit: 0,
+  fundingProfit: -2.45,
+  gridProfit: 0,
+  trades: 1701,
+  grids: 92,
+  quantity: 4,
   minPrice: 0.435,
   maxPrice: 0.653,
-  currentPrice: 0.45826,
   startPrice: 0.54482,
-  endPrice: 0,
+  endPrice: 0.45826,
+  duration: 3087362,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.4,
-  duration: 3087362,
-  trades: 1701,
-  total: -10.08179156,
-  funding: -2.45,
+  detailTime: '2025-01-07T13:42:14.004Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T13:42:14.004Z',
 };
-
-export const quantity = 4;
 
 export const gridError = data.trades * 0.00001 * 4.185;
 

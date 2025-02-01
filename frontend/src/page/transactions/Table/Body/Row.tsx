@@ -1,6 +1,6 @@
 import { TableRow } from '@mui/material';
 import { memo } from 'react';
-import { InstrumentInfo, Transaction } from '../../../../api/backend/types';
+import { Transaction } from '../../../../api/backend/types';
 import { GridsBodyDeposit } from './Deposit';
 import { GridsBodyInstrument } from './Instrument';
 import { GridsBodyPeriodProfit } from './PeriodProfit';
@@ -10,10 +10,9 @@ import { GridsBodyTotalProfit } from './TotalProfit';
 
 export type GridsBodyRowProps = {
   transaction: Transaction<'grid'>;
-  info: InstrumentInfo;
 };
 const GridsBodyRow = (props: GridsBodyRowProps) => {
-  const { transaction, info } = props;
+  const { transaction } = props;
   const { id, data } = transaction;
 
   return (
@@ -22,8 +21,8 @@ const GridsBodyRow = (props: GridsBodyRowProps) => {
       <GridsBodyDeposit transaction={data} />
       <GridsBodyPrice transaction={data} />
       <GridsBodyTime transaction={data} />
-      <GridsBodyPeriodProfit transaction={data} info={info} />
-      <GridsBodyTotalProfit transaction={data} info={info} />
+      <GridsBodyPeriodProfit transaction={data} />
+      <GridsBodyTotalProfit transaction={data} />
     </TableRow>
   );
 };

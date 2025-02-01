@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'DOGSUSDT',
   amount: 91.5,
+  leverage: 1.5,
+  totalProfit: -0.84726415,
+  spotProfit: 0,
+  fundingProfit: -0.45,
+  gridProfit: 0,
+  trades: 1694,
+  grids: 93,
+  quantity: 1800,
   minPrice: 0.000509,
   maxPrice: 0.000763,
-  currentPrice: 0.0005661,
   startPrice: 0.0006374,
-  endPrice: 0,
+  endPrice: 0.0005661,
+  duration: 1744634,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 93,
-  leverage: 1.5,
-  duration: 1744634,
-  trades: 1694,
-  total: -0.84726415,
-  funding: -0.45,
+  detailTime: '2025-01-04T06:18:08.962Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-04T06:18:08.962Z',
 };
-
-export const quantity = 1800;
 
 export const gridError = data.trades * 0.00001 * 5.105;
 

@@ -8,12 +8,12 @@ export const getGridTotal = (
   transaction: GridTransactionData,
   mode: IncomeMode,
 ) => {
-  const { total, amount } = transaction;
+  const { totalProfit, amount } = transaction;
   if (mode === 'percent') {
-    return (total / amount) * 100;
+    return (totalProfit / amount) * 100;
   }
   if (mode === 'usdt') {
-    return total;
+    return totalProfit;
   }
   return assertNever(mode);
 };

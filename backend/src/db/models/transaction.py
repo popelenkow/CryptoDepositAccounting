@@ -30,21 +30,25 @@ class GridTransactionData(BaseModelWithUndefined):
     type: Literal["grid"]
     instrument: str
     amount: float
+    leverage: float
+    totalProfit: float
+    spotProfit: float
+    fundingProfit: float
+    gridProfit: float
+    trades: int
+    grids: int
+    quantity: float
     minPrice: float
     maxPrice: float
-    currentPrice: float
     startPrice: float
     endPrice: float
+    duration: float
     startTime: str
     endTime: str
-    grids: int
-    leverage: float
-    duration: float
-    trades: int
-    total: float
-    funding: float
+    detailTime: str
+    detailStatus: Literal["init", "pending", "close"]
+    profitStatus: Literal["init", "infoError", "done"]
     close: Literal["pending", "manual", "auto"]
-    lastUpdate: Union[str, Literal["open", "close"]]
 
 
 TransactionDataUnion = Union[

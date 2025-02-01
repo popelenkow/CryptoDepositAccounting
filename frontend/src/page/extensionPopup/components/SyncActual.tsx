@@ -5,14 +5,14 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { importTransactionsOptions } from '../../../api/backend/endpoints';
 import { getGridsOptions } from '../../../api/bybit/endpoints';
-import { createTransaction } from '../common/map';
+import { calcTransactionProfits, createTransaction } from '../common/map';
 import { useActiveTabId } from '../common/useActiveTab';
 import { useGridList } from '../useGridList';
 
 export const SyncActual: FC = () => {
   const { t } = useTranslation();
   const tabId = useActiveTabId();
-  const list = useGridList();
+  const { transactions, infos } = useGridList();
 
   const importTransactions = useMutation(importTransactionsOptions);
   const getGrids = useMutation(getGridsOptions(tabId));
@@ -27,11 +27,11 @@ export const SyncActual: FC = () => {
       endIcon={<SyncIcon />}
       onClick={async () => {
         const response = await getGrids.mutateAsync();
-        const bots = response.result.bots.map((bot) =>
-          createTransaction(bot.future_grid, list),
-        );
-        bots.reverse();
-        importTransactions.mutate(bots);
+        const newTransactions = response.result.bots
+          .map((bot) => createTransaction(bot.future_grid, transactions))
+          .map((transaction) => calcTransactionProfits(transaction, infos));
+        newTransactions.reverse();
+        importTransactions.mutate(newTransactions);
       }}
     >
       {t('page.extensionPopup.syncActual')}

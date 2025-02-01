@@ -9,16 +9,32 @@ client = HTTP(testnet=False)
 
 
 def syncInstrumentInfos():
-    response = client.get_instruments_info(category="linear")
-    result = response["result"]["list"]
-    result = [
-        InstrumentInfoData.model_validate(
-            {
-                "instrument": item["symbol"],
-                "priceStep": item["priceFilter"]["tickSize"],
-                "quantityStep": item["lotSizeFilter"]["qtyStep"],
-            }
+    allResults = []
+    cursor = None
+
+    while True:
+        params = {"category": "linear", "limit": 500}
+        if cursor:
+            params["cursor"] = cursor
+
+        response = client.get_instruments_info(**params)
+        result = response["result"]["list"]
+
+        allResults.extend(
+            [
+                InstrumentInfoData.model_validate(
+                    {
+                        "instrument": item["symbol"],
+                        "priceStep": item["priceFilter"]["tickSize"],
+                        "quantityStep": item["lotSizeFilter"]["qtyStep"],
+                    }
+                )
+                for item in result
+            ]
         )
-        for item in response["result"]["list"]
-    ]
-    importInstrumentInfos(result)
+
+        cursor = response["result"].get("nextPageCursor")
+        if not cursor:
+            break
+
+    importInstrumentInfos(allResults)

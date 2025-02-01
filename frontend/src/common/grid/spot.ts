@@ -13,8 +13,7 @@ export const getGridSpot = (
   mode: IncomeMode,
   floor: boolean,
 ) => {
-  const { close, startPrice, amount } = transaction;
-  const currentPrice = close === 'pending' ? transaction.currentPrice : transaction.endPrice;
+  const { startPrice, endPrice, amount } = transaction;
   const buyPrices = getGridPrices(transaction, info, 'buy', floor);
   const sellPrices = getGridPrices(transaction, info, 'sell', floor);
   const quantity = getGridTradeQuantity(transaction, info);
@@ -26,13 +25,13 @@ export const getGridSpot = (
     const buy = buyPrice * quantity * (1 + commission);
     const sell = sellPrice * quantity * (1 - commission);
     const sBuy = startPrice * quantity * (1 + commission);
-    const cSell = currentPrice * quantity * (1 - commission);
-    if (currentPrice < startPrice) {
+    const eSell = endPrice * quantity * (1 - commission);
+    if (endPrice < startPrice) {
       if (buyPrice > startPrice) {
-        return cSell - sBuy;
+        return eSell - sBuy;
       }
-      if (buyPrice > currentPrice) {
-        return cSell - buy;
+      if (buyPrice > endPrice) {
+        return eSell - buy;
       }
       return 0;
     }
@@ -40,10 +39,10 @@ export const getGridSpot = (
     if (buyPrice < startPrice) {
       return 0;
     }
-    if (sellPrice < currentPrice) {
+    if (sellPrice < endPrice) {
       return sell - sBuy;
     }
-    return cSell - sBuy;
+    return eSell - sBuy;
   });
   const profit = profits.reduce((acc, x) => acc + x, 0);
 

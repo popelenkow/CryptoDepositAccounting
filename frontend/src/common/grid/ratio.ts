@@ -1,7 +1,7 @@
 import { GridTransactionData, InstrumentInfo } from '../../api/backend/types';
 import { assertNever } from '../assert';
 import { getRatio } from '../ratio';
-import { ceilTo, floorTo, getDecimalPrecision } from '../value';
+import { ceilTo, floorTo, getDecimals } from '../value';
 
 export const getGridTradeRatio = (transaction: GridTransactionData) => {
   const { grids, minPrice, maxPrice } = transaction;
@@ -19,7 +19,7 @@ export const getGridPrices = (
   const { grids, minPrice } = transaction;
   const { priceStep } = instrumentInfo;
 
-  const decimals = getDecimalPrecision(priceStep);
+  const decimals = getDecimals(priceStep);
   const ratio = getGridTradeRatio(transaction);
 
   const arr: number[] = [];
@@ -40,8 +40,8 @@ export const getGridPrices = (
 export const getGridCurrentPricePercent = (
   transaction: GridTransactionData,
 ) => {
-  const { currentPrice, minPrice, maxPrice } = transaction;
-  const current = currentPrice - minPrice;
+  const { endPrice, minPrice, maxPrice } = transaction;
+  const current = endPrice - minPrice;
   const total = maxPrice - minPrice;
   return (current / total) * 100;
 };

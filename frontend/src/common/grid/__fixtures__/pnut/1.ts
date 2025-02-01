@@ -6,24 +6,26 @@ export const data: TransactionData<'grid'> = {
   type: 'grid',
   instrument: 'PNUTUSDT',
   amount: 64.73,
+  leverage: 1.5,
+  totalProfit: -4.58782608,
+  spotProfit: 0,
+  fundingProfit: -0.31,
+  gridProfit: 0,
+  trades: 2758,
+  grids: 92,
+  quantity: 1,
   minPrice: 0.6549,
   maxPrice: 0.9824,
-  currentPrice: 0.641,
   startPrice: 0.8219,
-  endPrice: 0,
+  endPrice: 0.641,
+  duration: 1685868,
   startTime: '2025-01-01T01:00:00.000Z',
   endTime: '2025-01-01T01:00:00.000Z',
-  grids: 92,
-  leverage: 1.5,
-  duration: 1685868,
-  trades: 2758,
-  total: -4.58782608,
-  funding: -0.31,
+  detailTime: '2025-01-07T17:00:53.294Z',
+  detailStatus: 'pending',
+  profitStatus: 'done',
   close: 'pending',
-  lastUpdate: '2025-01-07T17:00:53.294Z',
 };
-
-export const quantity = 1;
 
 export const gridError = data.trades * 0.00001 * 1.446;
 

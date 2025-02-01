@@ -1,41 +1,38 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  GridTransactionData,
-  InstrumentInfo,
-} from '../../../../api/backend/types';
+import { GridTransactionData } from '../../../../api/backend/types';
 import { getProfitPercentColor } from '../../../../common/color';
 import { currencySymbols } from '../../../../common/currency';
-import { getGridFunding } from '../../../../common/grid/funding';
-import { getGridSpot } from '../../../../common/grid/spot';
-import { getGridTotal } from '../../../../common/grid/total';
-import { getGridTrades } from '../../../../common/grid/trade';
+import { getMultiplier } from '../../../../common/multiplier';
 import { useGridOptionsStore } from '../../Options/store';
 
 export type GridsBodyTotalProfitProps = {
   transaction: GridTransactionData;
-  info: InstrumentInfo;
 };
 export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
-  const { transaction, info } = props;
+  const { transaction } = props;
+  const {
+    totalProfit,
+    spotProfit,
+    fundingProfit,
+    gridProfit,
+    amount,
+    profitStatus,
+  } = transaction;
 
   const { t } = useTranslation();
 
   const mode = useGridOptionsStore((state) => state.mode);
   const symbol = currencySymbols[mode];
 
-  const totalPercent = getGridTotal(transaction, 'percent');
-  const total = getGridTotal(transaction, mode).toFixed(2);
+  const multiplier = getMultiplier({ amount, mode });
+  const percentMultiplier = getMultiplier({ amount, mode: 'percent' });
 
-  const spotPercent = getGridSpot(transaction, info, 'percent', false);
-  const spot = getGridSpot(transaction, info, mode, false).toFixed(2);
-
-  const fundingPercent = getGridFunding(transaction, 'percent');
-  const funding = getGridFunding(transaction, mode).toFixed(2);
-
-  const gridPercent = getGridTrades(transaction, 'percent');
-  const grid = getGridTrades(transaction, mode).toFixed(2);
+  const toPreview = (value: number) =>
+    `${(value * multiplier).toFixed(2)} ${symbol}`;
+  const toColor = (value: number) =>
+    getProfitPercentColor(value * percentMultiplier);
 
   return (
     <TableCell align='right'>
@@ -43,35 +40,35 @@ export const GridsBodyTotalProfit: FC<GridsBodyTotalProfitProps> = (props) => {
         <Typography variant='body2'>
           {t('page.transactions.table.body.total')}
         </Typography>
-        <Typography variant='body2' color={getProfitPercentColor(totalPercent)}>
-          {total} {symbol}
+        <Typography variant='body2' color={toColor(totalProfit)}>
+          {toPreview(totalProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
-        <Typography variant='body2'>
+        <Typography
+          variant='body2'
+          color={profitStatus !== 'done' ? 'red.main' : undefined}
+        >
           {t('page.transactions.table.body.spot')}
         </Typography>
-        <Typography variant='body2' color={getProfitPercentColor(spotPercent)}>
-          {spot} {symbol}
+        <Typography variant='body2' color={toColor(spotProfit)}>
+          {toPreview(spotProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography variant='body2'>
           {t('page.transactions.table.body.funding')}
         </Typography>
-        <Typography
-          variant='body2'
-          color={getProfitPercentColor(fundingPercent)}
-        >
-          {funding} {symbol}
+        <Typography variant='body2' color={toColor(fundingProfit)}>
+          {toPreview(fundingProfit)}
         </Typography>
       </Stack>
       <Stack direction='row' justifyContent='end' gap={1}>
         <Typography variant='body2'>
           {t('page.transactions.table.body.grid')}
         </Typography>
-        <Typography variant='body2' color={getProfitPercentColor(gridPercent)}>
-          {grid} {symbol}
+        <Typography variant='body2' color={toColor(gridProfit)}>
+          {toPreview(gridProfit)}
         </Typography>
       </Stack>
     </TableCell>

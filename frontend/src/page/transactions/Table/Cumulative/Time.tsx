@@ -1,16 +1,15 @@
 import { Stack, TableCell, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getGridsDuration } from '../../../../common/grid/time';
 import { useGridList } from '../../useGridList';
 
 export const GridsCumulativeTime: FC = () => {
   const { t } = useTranslation();
   const { transactions } = useGridList();
 
-  const list = transactions.map((x) => x.data);
-
-  const duration = getGridsDuration(list);
+  const duration =
+    transactions.reduce((acc, x) => acc + x.data.duration, 0) /
+    transactions.length;
 
   return (
     <TableCell align='right'>

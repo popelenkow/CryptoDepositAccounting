@@ -1,20 +1,13 @@
 import { queryOptions } from '@tanstack/react-query';
 import { assertNever } from '../../../common/assert';
-import { getGridFunding } from '../../../common/grid/funding';
 import {
   getGridCurrentPricePercent,
   getGridEndPricePercent,
 } from '../../../common/grid/ratio';
-import { getGridPeriodSpot, getGridSpot } from '../../../common/grid/spot';
-import { getGridPeriodTotal, getGridTotal } from '../../../common/grid/total';
-import {
-  getGridPeriodTrades,
-  getGridTrades,
-  IncomeMode,
-} from '../../../common/grid/trade';
-import { findInstrumentInfo } from '../../../common/instrumentInfo';
+import { IncomeMode } from '../../../common/grid/trade';
+import { getMultiplier } from '../../../common/multiplier';
 import { getTransactionsOptions } from '../endpoints';
-import { InstrumentInfo, Transaction } from '../types';
+import { Transaction } from '../types';
 
 const checkGridTransaction = (
   transaction: Transaction,
@@ -86,42 +79,30 @@ export type GridTransactionSort = {
 
 const getSortValue = (
   transaction: Transaction<'grid'>,
-  info: InstrumentInfo,
   by: GridTransactionSortBy,
 ): number | string => {
   const { id, data } = transaction;
   if (by.category === 'profit') {
-    if (by.period === 'daily') {
-      if (by.type === 'total') {
-        return getGridPeriodTotal(data, by.mode, 'daily');
-      }
-      if (by.type === 'spot') {
-        return getGridPeriodSpot(data, info, by.mode, 'daily', false);
-      }
-      if (by.type === 'funding') {
-        return getGridPeriodTotal(data, by.mode, 'daily');
-      }
-      if (by.type === 'grid') {
-        return getGridPeriodTrades(data, by.mode, 'daily', 'optimistic');
-      }
-      return assertNever(by.type);
+    const multiplier = getMultiplier({
+      amount: data.amount,
+      duration: data.duration,
+      mode: by.mode,
+      period: by.period === 'daily' ? 'daily' : undefined,
+    });
+
+    if (by.type === 'total') {
+      return data.totalProfit * multiplier;
     }
-    if (by.period === 'lifetime') {
-      if (by.type === 'total') {
-        return getGridTotal(data, by.mode);
-      }
-      if (by.type === 'spot') {
-        return getGridSpot(data, info, by.mode, false);
-      }
-      if (by.type === 'funding') {
-        return getGridFunding(data, by.mode);
-      }
-      if (by.type === 'grid') {
-        return getGridTrades(data, by.mode);
-      }
-      return assertNever(by.type);
+    if (by.type === 'spot') {
+      return data.spotProfit * multiplier;
     }
-    return assertNever(by.period);
+    if (by.type === 'funding') {
+      return data.fundingProfit * multiplier;
+    }
+    if (by.type === 'grid') {
+      return data.gridProfit * multiplier;
+    }
+    return assertNever(by.type);
   }
 
   if (by.category === 'time') {
@@ -149,21 +130,13 @@ const getSortValue = (
   return assertNever(by);
 };
 
-const getSort = (infos: InstrumentInfo[], sort?: GridTransactionSort) => {
+const getSort = (sort?: GridTransactionSort) => {
   if (!sort) return () => 0;
 
   const { order, by } = sort;
   return (a: Transaction<'grid'>, b: Transaction<'grid'>) => {
-    const aValue = getSortValue(
-      a,
-      findInstrumentInfo(infos, a.data.instrument),
-      by,
-    );
-    const bValue = getSortValue(
-      b,
-      findInstrumentInfo(infos, b.data.instrument),
-      by,
-    );
+    const aValue = getSortValue(a, by);
+    const bValue = getSortValue(b, by);
 
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       if (order === 'desc') {
@@ -212,7 +185,7 @@ export const getGridTransactionsOptions = (
       const select = selectGridTransactionsMap[selectType];
       const selectedGrids = select(instrumentGrids);
 
-      return selectedGrids.sort(getSort([], sort));
+      return selectedGrids.sort(getSort(sort));
     },
   });
 };
